@@ -1,3 +1,5 @@
+import type { Country } from "../types/country";
+
 /**
  * Converts a 2-letter ISO country code (e.g., "US", "JP") into its corresponding emoji flag.
  * 
@@ -14,4 +16,11 @@ export const getFlagEmoji = (countryCode: string): string => {
       .split("")
       .map((char) => 127397 + char.charCodeAt(0))
   );
+};
+
+/**
+ * Sorts an array of countries alphabetically by name.
+ */
+export const sortCountriesByName = (countries: Country[]): Country[] => {
+  return [...countries].sort((a, b) => a.name.localeCompare(b.name));
 };

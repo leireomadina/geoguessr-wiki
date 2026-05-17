@@ -1,14 +1,14 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { countries } from "../data/countries";
-import { getFlagEmoji } from "../utils/countryUtils";
+import { getFlagEmoji, sortCountriesByName } from "../utils/countryUtils";
 import "../styles/ContinentDetail.css";
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
 
-  const countriesInContinent = countries.filter(
-    (country) => country.continent === continentName,
+  const countriesInContinent = sortCountriesByName(
+    countries.filter((country) => country.continent === continentName)
   );
 
   return (
@@ -34,6 +34,9 @@ const ContinentDetail: React.FC = () => {
                 <h2>{country.name}</h2>
                 <div className="country-badges">
                   <span className="iso-badge">{country.id}</span>
+                  <span className={`side-badge ${country.drivingSide}`}>
+                    {country.drivingSide === "left" ? "⬅ L" : "R ➡"}
+                  </span>
                   <span className={`difficulty-badge ${country.difficulty}`}>
                     {country.difficulty.replace("_", " ")}
                   </span>

@@ -4,8 +4,10 @@ import { countries } from "../data/countries";
 import "../styles/Home.css";
 
 const Home: React.FC = () => {
-  // Get unique continents from our data
-  const continents = Array.from(new Set(countries.map((c) => c.continent)));
+  // Get unique continents from our data and sort them
+  const continents = Array.from(
+    new Set(countries.map((country) => country.continent)),
+  ).sort();
 
   return (
     <div className="home-container">
