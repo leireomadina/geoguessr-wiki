@@ -1,8 +1,41 @@
 .continent-detail-container {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
-  padding-bottom: 4rem;
+  gap: 2.5rem;
+  padding-bottom: 3rem;
+  position: relative;
+}
+
+.hero {
+  padding: 2rem 0;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0.5rem 0;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.back-arrow-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--bg-dark);
+  cursor: pointer;
+  display: inline-flex;
+  transition: all 0.2s;
+}
+
+.back-arrow-btn:hover {
+  color: #4c1d95;
+  transform: translateX(-8px);
 }
 
 .country-grid {

@@ -1,13 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { countries } from "../data/countries";
+import { formatCountryCount } from "../utils/countryUtils";
 import "../styles/Home.css";
 
 const Home: React.FC = () => {
   // Get unique continents from our data and sort them
-  const continents = Array.from(
-    new Set(countries.map((country) => country.continent)),
-  ).sort();
+  const continents = Array.from(new Set(countries.map((c) => c.continent)))
+    .sort((a, b) => a.localeCompare(b));
+
+  const getCountryCountText = (continent: string) => {
+    const count = countries.filter((c) => c.continent === continent).length;
+    return formatCountryCount(count);
+  };
+
 
   return (
     <div className="home-container">
@@ -28,8 +34,7 @@ const Home: React.FC = () => {
             <div className="continent-card-content">
               <h2>{continent}</h2>
               <span className="country-count">
-                {countries.filter((c) => c.continent === continent).length}{" "}
-                Countries
+                {getCountryCountText(continent)}
               </span>
             </div>
             <div className="card-arrow">→</div>

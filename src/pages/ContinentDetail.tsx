@@ -1,24 +1,33 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { countries } from "../data/countries";
-import { getFlagEmoji, sortCountriesByName } from "../utils/countryUtils";
+import {
+  getFlagEmoji,
+  sortCountriesByName,
+  formatCountryCount,
+} from "../utils/countryUtils";
 import "../styles/ContinentDetail.css";
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
+  const navigate = useNavigate();
 
   const countriesInContinent = sortCountriesByName(
-    countries.filter((country) => country.continent === continentName)
+    countries.filter((country) => country.continent === continentName),
   );
+
+  const getStatsText = () => {
+    return `${formatCountryCount(countriesInContinent.length)} found`;
+  };
 
   return (
     <div className="continent-detail-container">
       <section className="hero">
+        <button onClick={() => navigate(-1)} className="back-arrow-btn">
+          ←
+        </button>
         <h1>{continentName}</h1>
-        <p>
-          {countriesInContinent.length}{" "}
-          {countriesInContinent.length === 1 ? "country" : "countries"} found
-        </p>
+        <p>{getStatsText()}</p>
       </section>
 
       <div className="country-grid">
