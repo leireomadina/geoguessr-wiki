@@ -23,6 +23,13 @@ export const countries: Country[] = [
     difficulty: "easy",
   },
   {
+    id: "PL",
+    name: "Poland",
+    continent: "Europe",
+    studyLinks: ["https://www.geoguessr.com/vg/poland"],
+    difficulty: "hard",
+  },
+  {
     id: "ZA",
     name: "South Africa",
     continent: "Africa",

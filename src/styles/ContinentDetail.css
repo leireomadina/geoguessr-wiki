@@ -1,0 +1,98 @@
+.continent-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-bottom: 4rem;
+}
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.country-card {
+  background-color: var(--white);
+  padding: 2.5rem;
+  border-radius: 0px;
+  border: 4px solid #000000;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 8px 8px 0px 0px #000000;
+  position: relative;
+  overflow: hidden;
+}
+
+.country-card:hover {
+  transform: translate(-4px, -4px) rotate(1deg);
+  box-shadow: 16px 16px 0px 0px #4c1d95;
+  border-color: #4c1d95;
+}
+
+.country-card:nth-child(even):hover {
+  transform: translate(-4px, -4px) rotate(-1deg);
+}
+
+.country-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.country-flag {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.country-info h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.country-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.iso-badge,
+.difficulty-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid #000000;
+  display: inline-block;
+}
+
+.iso-badge {
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  font-weight: 600;
+}
+
+.difficulty-badge {
+  color: #000000;
+}
+
+.difficulty-badge.easy { background-color: #4ade80; }
+.difficulty-badge.medium { background-color: #facc15; }
+.difficulty-badge.hard { background-color: #fb923c; }
+.difficulty-badge.very_hard { background-color: #f87171; color: #ffffff; }
+
+@media (max-width: 600px) {
+  .country-grid {
+    grid-template-columns: 1fr;
+  }
+}
