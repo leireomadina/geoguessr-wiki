@@ -7,6 +7,7 @@ export const countries: Country[] = [
     continent: "Asia",
     studyLinks: ["https://www.geoguessr.com/vg/japan"],
     difficulty: "hard",
+    drivingSide: "left",
   },
   {
     id: "BR",
@@ -14,6 +15,7 @@ export const countries: Country[] = [
     continent: "South America",
     studyLinks: ["https://www.geoguessr.com/vg/brazil"],
     difficulty: "medium",
+    drivingSide: "right",
   },
   {
     id: "ES",
@@ -21,13 +23,39 @@ export const countries: Country[] = [
     continent: "Europe",
     studyLinks: ["https://www.geoguessr.com/vg/spain"],
     difficulty: "easy",
+    drivingSide: "right",
   },
   {
     id: "PL",
     name: "Poland",
     continent: "Europe",
     studyLinks: ["https://www.geoguessr.com/vg/poland"],
+    difficulty: "medium",
+    drivingSide: "right",
+  },
+  {
+    id: "IT",
+    name: "Italy",
+    continent: "Europe",
+    studyLinks: ["https://www.geoguessr.com/vg/italy"],
     difficulty: "hard",
+    drivingSide: "right",
+  },
+  {
+    id: "FR",
+    name: "France",
+    continent: "Europe",
+    studyLinks: ["https://www.geoguessr.com/vg/france"],
+    difficulty: "medium",
+    drivingSide: "right",
+  },
+  {
+    id: "CZ",
+    name: "Czechia",
+    continent: "Europe",
+    studyLinks: ["https://www.geoguessr.com/vg/czech-republic"],
+    difficulty: "hard",
+    drivingSide: "right",
   },
   {
     id: "ZA",
@@ -35,6 +63,7 @@ export const countries: Country[] = [
     continent: "Africa",
     studyLinks: ["https://www.geoguessr.com/vg/south-africa"],
     difficulty: "very_hard",
+    drivingSide: "left",
   },
   {
     id: "US",
@@ -42,6 +71,7 @@ export const countries: Country[] = [
     continent: "North America",
     studyLinks: ["https://www.geoguessr.com/vg/united-states"],
     difficulty: "hard",
+    drivingSide: "right",
   },
   {
     id: "AU",
@@ -49,5 +79,6 @@ export const countries: Country[] = [
     continent: "Oceania",
     studyLinks: ["https://www.geoguessr.com/vg/australia"],
     difficulty: "hard",
+    drivingSide: "left",
   },
 ];
