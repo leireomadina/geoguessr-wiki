@@ -10,10 +10,46 @@
   padding: 2rem 0;
 }
 
+.hero-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .hero-header {
+    gap: 0.5rem;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    width: 100%;
+  }
+
+  .stats-text {
+    font-size: 0.8rem;
+  }
+
+  .country-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats-text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
 .hero h1 {
   font-size: 4rem;
   font-weight: 900;
-  margin: 0.5rem 0;
+  margin: 0;
   letter-spacing: -0.05em;
   line-height: 0.9;
   text-transform: uppercase;
@@ -24,7 +60,7 @@
   background: none;
   border: none;
   padding: 0;
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   font-size: 2.25rem;
   font-weight: 900;
   color: var(--bg-dark);
@@ -38,6 +74,41 @@
   transform: translateX(-8px);
 }
 
+.search-container {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-bottom: 4px solid #000000;
+  background-color: transparent;
+  box-shadow: none;
+  outline: none;
+  transition: all 0.2s;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+.search-input:focus {
+  border-bottom-color: #4c1d95;
+  padding-left: 1.5rem;
+}
+
+.search-input::placeholder {
+  color: #000000;
+  opacity: 0.3;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
 .country-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -47,7 +118,7 @@
 
 .country-card {
   background-color: var(--white);
-  padding: 2.5rem;
+  padding: 2rem 1.5rem;
   border-radius: 0px;
   border: 4px solid #000000;
   text-decoration: none;
@@ -59,6 +130,7 @@
   box-shadow: 8px 8px 0px 0px #000000;
   position: relative;
   overflow: hidden;
+  min-height: 120px;
 }
 
 .country-card:hover {
@@ -101,37 +173,6 @@
 .iso-badge,
 .side-badge,
 .difficulty-badge {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  padding: 0.15rem 0.5rem;
-  border: 2px solid #000000;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.country-card {
-  background-color: var(--white);
-  padding: 2rem 1.5rem;
-  border-radius: 0px;
-  border: 4px solid #000000;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 8px 8px 0px 0px #000000;
-  position: relative;
-  overflow: hidden;
-  min-height: 120px;
-}
-
-.iso-badge,
-.side-badge,
-.difficulty-badge {
   font-size: 0.75rem;
   text-transform: uppercase;
   font-weight: 800;
@@ -166,6 +207,22 @@
 .difficulty-badge.medium { background-color: #facc15; }
 .difficulty-badge.hard { background-color: #fb923c; }
 .difficulty-badge.very_hard { background-color: #f87171; color: #ffffff; }
+
+.no-results {
+  grid-column: 1 / -1;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #f3f4f6;
+  border: 4px dashed #000000;
+}
+
+.no-results p {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0;
+  color: #000000;
+}
 
 @media (max-width: 600px) {
   .country-grid {

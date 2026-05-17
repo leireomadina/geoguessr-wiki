@@ -22,6 +22,7 @@ export const getFlagEmoji = (countryCode: string): string => {
  * Returns a formatted string for the country count (e.g., "1 country" or "5 countries").
  */
 export const formatCountryCount = (count: number): string => {
+  if (count === 0) return "No countries";
   return `${count} ${count === 1 ? "country" : "countries"}`;
 };
 
