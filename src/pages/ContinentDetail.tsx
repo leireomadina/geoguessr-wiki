@@ -12,6 +12,7 @@ const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState("");
 
   const countriesInContinent = sortCountriesByName(
     countries.filter((country) => country.continent === continentName),
@@ -19,8 +20,9 @@ const ContinentDetail: React.FC = () => {
 
   const filteredCountries = countriesInContinent.filter(
     (country) =>
-      country.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      country.id.toLowerCase().includes(searchText.toLowerCase()),
+      (country.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        country.id.toLowerCase().includes(searchText.toLowerCase())) &&
+      (difficultyFilter === "" || country.difficulty === difficultyFilter),
   );
 
   const getStatsText = () => {
@@ -46,6 +48,17 @@ const ContinentDetail: React.FC = () => {
             onChange={(e) => setSearchText(e.target.value)}
             className="search-input"
           />
+          <select
+            value={difficultyFilter}
+            onChange={(e) => setDifficultyFilter(e.target.value)}
+            className="difficulty-filter"
+          >
+            <option value="">All Difficulties</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="very_hard">Very Hard</option>
+          </select>
         </div>
       </section>
 
