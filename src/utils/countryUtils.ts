@@ -1,8 +1,8 @@
-import type { Country } from "../types/country";
+import type { Country } from "@/types/country";
 
 /**
  * Converts a 2-letter ISO country code (e.g., "US", "JP") into its corresponding emoji flag.
- * 
+ *
  * How it works:
  * 1. Unicode "Regional Indicator Symbols" start at 127462 (index for 'A').
  * 2. Standard ASCII capital 'A' is 65.
@@ -14,7 +14,7 @@ export const getFlagEmoji = (countryCode: string): string => {
     ...countryCode
       .toUpperCase()
       .split("")
-      .map((char) => 127397 + char.charCodeAt(0))
+      .map((char) => 127397 + char.charCodeAt(0)),
   );
 };
 

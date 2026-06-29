@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { countries } from "../data/countries";
+import { countries } from "@/data/countries";
 import {
   getFlagEmoji,
   sortCountriesByName,
   formatCountryCount,
-} from "../utils/countryUtils";
-import "../styles/ContinentDetail.css";
+} from "@/utils/countryUtils";
+import "@/styles/ContinentDetail.css";
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
@@ -15,7 +15,9 @@ const ContinentDetail: React.FC = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
 
   const countriesInContinent = sortCountriesByName(
-    countries.filter((country) => country.continent === continentName),
+    countries.filter(
+      (country) => country.continent.toLowerCase() === continentName,
+    ),
   );
 
   const filteredCountries = countriesInContinent.filter(
