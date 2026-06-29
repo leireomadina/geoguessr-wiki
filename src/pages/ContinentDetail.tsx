@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { countries } from "@/data/countries";
 import {
-  getFlagEmoji,
   sortCountriesByName,
   formatCountryCount,
 } from "@/utils/countryUtils";
 import "@/styles/ContinentDetail.css";
+import CountryCard from "@/components/CountryCard";
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
@@ -67,28 +67,7 @@ const ContinentDetail: React.FC = () => {
       <div className="country-grid">
         {filteredCountries.length > 0 ? (
           filteredCountries.map((country) => (
-            <Link
-              key={country.id}
-              to={`/country/${country.id}`}
-              className="country-card"
-            >
-              <div className="country-card-header">
-                <span className="country-flag">{getFlagEmoji(country.id)}</span>
-                <div className="country-info">
-                  <h2>{country.name}</h2>
-                  <div className="country-badges">
-                    <span className="iso-badge">{country.id}</span>
-                    <span className={`side-badge ${country.drivingSide}`}>
-                      {country.drivingSide === "left" ? "⬅ L" : "R ➡"}
-                    </span>
-                    <span className={`difficulty-badge ${country.difficulty}`}>
-                      {country.difficulty.replace("_", " ")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="card-arrow">→</div>
-            </Link>
+            <CountryCard key={country.id} country={country} />
           ))
         ) : (
           <div className="no-results">
