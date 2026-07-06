@@ -16,9 +16,9 @@ const CountryCard: React.FC<CountryCardProps> = ({ country }) => {
         <div className="country-info">
           <h2>{country.name}</h2>
           <div className="country-badges">
-            <span className="iso-badge">{country.id}</span>
+            <span className="iso-badge">.{country.id.toLowerCase()}</span>
             <span className={`side-badge ${country.drivingSide}`}>
-              {country.drivingSide === "left" ? "⬅ L" : "R ➡"}
+              {country.drivingSide === "left" ? "🚗 L" : "R 🚗"}
             </span>
             <span className={`difficulty-badge ${country.difficulty}`}>
               {country.difficulty.replace("_", " ")}

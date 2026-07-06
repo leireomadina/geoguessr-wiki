@@ -1,58 +1,120 @@
 .country-detail-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-  padding-bottom: 3rem;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+    position: relative;
 }
 
 .hero {
-  padding: 2rem 0;
+    padding: 2rem 0;
 }
 
 .hero-header {
-  display: flex;
-  align-items: baseline;
-  gap: 1.5rem;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .hero h1 {
-  font-size: 4rem;
-  font-weight: 900;
-  margin: 0;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  text-transform: uppercase;
-  color: #000000;
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: #000000;
 }
 
 .back-arrow-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font-size: 2.25rem;
-  font-weight: 900;
-  color: var(--bg-dark);
-  cursor: pointer;
-  display: inline-flex;
-  transition: all 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 900;
+    color: var(--bg-dark);
+    cursor: pointer;
+    display: inline-flex;
+    transition: all 0.2s;
 }
 
 .back-arrow-btn:hover {
-  color: #4c1d95;
-  transform: translateX(-8px);
+    color: #4c1d95;
+    transform: translateX(-8px);
 }
 
-@media (max-width: 600px) {
-  .hero-header {
-    gap: 0.5rem;
-  }
+.country-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
 
-  .hero h1 {
-    font-size: 2.5rem;
-    width: 100%;
-  }
+.country-flag-large {
+    font-size: 5rem;
+    line-height: 1;
+}
+
+.country-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.iso-badge {
+  font-size: 1.5rem;
+  text-transform: lowercase;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid #000000;
+  display: inline-block;
+  background: transparent;
+  color: #000000;
+}
+
+.side-badge {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid #000000;
+  display: inline-block;
+  background: transparent;
+  color: #000000;
+}
+
+.difficulty-badge {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid #000000;
+  display: inline-block;
+  color: #000000;
+}
+
+.difficulty-badge.easy { background-color: #4ade80; }
+.difficulty-badge.medium { background-color: #facc15; }
+.difficulty-badge.hard { background-color: #fb923c; }
+.difficulty-badge.very_hard { background-color: #f87171; color: #ffffff; }
+
+@media (max-width: 600px) {
+    .hero-header {
+        gap: 0.5rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        width: 100%;
+    }
+
+    .country-flag-large {
+        font-size: 3.5rem;
+    }
 }
