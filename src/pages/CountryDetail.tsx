@@ -35,8 +35,43 @@ const CountryDetail: React.FC = () => {
                 {country.difficulty.replace("_", " ")}
               </span>
             )}
+            {country?.studyLinks
+              .filter((link) => link.includes("plonkit"))
+              .map((link, i) => (
+                <a
+                  key={i}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="plonkit-badge"
+                >
+                  plonkit →
+                </a>
+              ))}
           </div>
         </div>
+      </section>
+
+      <section className="resources-section">
+        <h2 className="section-title">Study links</h2>
+        {country && country.studyLinks.length > 0 ? (
+          <ul className="resources-list">
+            {country.studyLinks.map((link, i) => (
+              <li key={i}>
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resource-link"
+                >
+                  {new URL(link).hostname.replace("www.", "")}
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="empty-resources">No study links yet :(</p>
+        )}
       </section>
     </div>
   );

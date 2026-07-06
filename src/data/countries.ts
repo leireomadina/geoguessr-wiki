@@ -13,8 +13,11 @@ export const countries: Country[] = [
     id: "BR",
     name: "Brazil",
     continent: "South America",
-    studyLinks: ["https://www.geoguessr.com/vg/brazil"],
-    difficulty: "medium",
+    studyLinks: [
+      "https://www.plonkit.net/brazil",
+      "https://docs.google.com/document/d/12FLRcFGEDUfFrkD6jKLkEOXAeCIdn0SAZEMCusPNwg8/edit?tab=t.0#heading=h.n9yqjhjgk3ma",
+    ],
+    difficulty: "easy",
     drivingSide: "right",
   },
   {
