@@ -8,7 +8,9 @@ const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const country = countries.find((country) => country.id === id);
+  const country = countries.find(
+    (country) => country.id.toLowerCase() === id?.toLowerCase(),
+  );
 
   return (
     <div className="country-detail-container">
@@ -24,7 +26,7 @@ const CountryDetail: React.FC = () => {
             {country ? getFlagEmoji(country.id) : "🏳"}
           </span>
           <div className="country-badges">
-            <span className="iso-badge">.{id}</span>
+            <span className="iso-badge">.{id?.toLowerCase()}</span>
             {country && (
               <span className={`side-badge ${country.drivingSide}`}>
                 {country.drivingSide === "left" ? "🚗 L" : "R 🚗"}
@@ -36,11 +38,11 @@ const CountryDetail: React.FC = () => {
               </span>
             )}
             {country?.studyLinks
-              .filter((link) => link.includes("plonkit"))
+              .filter((link) => link.url.includes("plonkit"))
               .map((link, i) => (
                 <a
                   key={i}
-                  href={link}
+                  href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="plonkit-badge"
@@ -52,6 +54,21 @@ const CountryDetail: React.FC = () => {
         </div>
       </section>
 
+      {country && country.meta && country.meta.length > 0 && (
+        <section className="resources-section">
+          <h2 className="section-title">Meta</h2>
+          <dl className="key-data-grid">
+            {country.meta.map((item, i) => (
+              <div key={i} className="key-data-item">
+                <dd>{item.value}</dd>
+                <span className={`meta-tag-dot ${item.tag}`} />
+                <span className="meta-tag-text">{item.tag.replace("_", " ")}</span>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
       <section className="resources-section">
         <h2 className="section-title">Study links</h2>
         {country && country.studyLinks.length > 0 ? (
@@ -59,12 +76,19 @@ const CountryDetail: React.FC = () => {
             {country.studyLinks.map((link, i) => (
               <li key={i}>
                 <a
-                  href={link}
+                  href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="resource-link"
                 >
-                  {new URL(link).hostname.replace("www.", "")}
+                  {link.url.includes("plonkit") && (
+                    <img
+                      src="https://www.plonkit.net/favicon-32x32.png"
+                      alt=""
+                      className="plonkit-icon"
+                    />
+                  )}
+                  {link.label}
                 </a>
               </li>
             ))}
@@ -73,6 +97,29 @@ const CountryDetail: React.FC = () => {
           <p className="empty-resources">No study links yet :(</p>
         )}
       </section>
+
+      {country && country.videos && country.videos.length > 0 && (
+        <section className="resources-section">
+          <h2 className="section-title">Videos</h2>
+          <ul className="resources-list">
+            {country.videos.map((video, i) => (
+              <li key={i}>
+                <a
+                  href={video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resource-link"
+                >
+                  <span className={`platform-icon ${video.platform ?? "other"}`}>
+                    {video.platform === "youtube" ? "▶" : "🎬"}
+                  </span>
+                  {video.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 };
