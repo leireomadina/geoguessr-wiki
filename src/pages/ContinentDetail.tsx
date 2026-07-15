@@ -5,6 +5,7 @@ import {
   sortCountriesByName,
   formatCountryCount,
 } from "@/utils/countryUtils";
+import { unslugContinent } from "@/utils/continentSlug";
 import "@/styles/ContinentDetail.css";
 import CountryCard from "@/components/CountryCard";
 
@@ -14,10 +15,9 @@ const ContinentDetail: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("");
 
+  const continent = unslugContinent(continentName ?? "");
   const countriesInContinent = sortCountriesByName(
-    countries.filter(
-      (country) => country.continent.toLowerCase() === continentName,
-    ),
+    countries.filter((country) => country.continent === continent),
   );
 
   const filteredCountries = countriesInContinent.filter(
@@ -38,7 +38,7 @@ const ContinentDetail: React.FC = () => {
           <button onClick={() => navigate(-1)} className="back-arrow-btn">
             ←
           </button>
-          <h1>{continentName}</h1>
+          <h1>{continent ?? continentName}</h1>
           <p className="stats-text">{getStatsText()}</p>
         </div>
 

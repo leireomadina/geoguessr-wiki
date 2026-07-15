@@ -11,6 +11,7 @@ export type Continent =
 export interface StudyLink {
   label: string;
   url: string;
+  platform?: "website" | "google docs" | "other";
 }
 
 export interface CountryImage {

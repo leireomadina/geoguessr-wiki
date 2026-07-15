@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { countries } from "@/data/countries";
 import { formatCountryCount } from "@/utils/countryUtils";
+import { slugContinent } from "@/utils/continentSlug";
 import "@/styles/Home.css";
 
 const Home: React.FC = () => {
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
         {continents.map((continent) => (
           <Link
             key={continent}
-            to={`/continent/${continent.toLowerCase()}`}
+            to={`/continent/${slugContinent(continent)}`}
             className="continent-card"
           >
             <div className="continent-card-content">
