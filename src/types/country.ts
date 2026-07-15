@@ -8,11 +8,39 @@ export type Continent =
   | "Oceania"
   | "South America";
 
+export interface StudyLink {
+  label: string;
+  url: string;
+  platform?: "website" | "google docs" | "other";
+}
+
+export interface CountryImage {
+  src: string;
+  alt: string;
+  label: string;
+  category: "flag" | "landscape" | "infographic" | "other";
+}
+
+export interface VideoLink {
+  label: string;
+  url: string;
+  platform?: "youtube" | "vimeo" | "other";
+}
+
+export interface Meta {
+  label: string;
+  value: string;
+  tag: Difficulty;
+}
+
 export interface Country {
   id: string; // ISO Code (e.g., 'ES' for Spain)
   name: string;
   continent: Continent;
-  studyLinks: string[];
   difficulty: Difficulty;
+  studyLinks: StudyLink[];
   drivingSide: DrivingSide;
+  images?: CountryImage[];
+  videos?: VideoLink[];
+  meta?: Meta[];
 }
