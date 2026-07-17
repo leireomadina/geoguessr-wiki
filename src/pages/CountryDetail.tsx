@@ -55,7 +55,7 @@ const CountryDetail: React.FC = () => {
         </div>
       </section>
 
-      {country && country.regions && country.regions.length > 0 && (
+      {country && country.regions && (
         <section className="resources-section">
           <button
             className="section-title regions-toggle"

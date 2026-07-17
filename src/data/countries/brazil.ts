@@ -30,6 +30,7 @@ const country: Country = {
     { label: "meta", value: "Black back signs", tag: "easy" },
     { label: "meta", value: "Phone numbers", tag: "medium" },
   ],
+  regions: [],
 };
 
 export default country;
