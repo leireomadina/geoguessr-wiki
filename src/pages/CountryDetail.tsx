@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { countries } from "@/data/countries";
 import { getFlagEmoji } from "@/utils/countryUtils";
@@ -7,6 +7,7 @@ import "@/styles/CountryDetail.css";
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [regionsOpen, setRegionsOpen] = useState(false);
 
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
@@ -54,6 +55,33 @@ const CountryDetail: React.FC = () => {
         </div>
       </section>
 
+      {country && country.regions && country.regions.length > 0 && (
+        <section className="resources-section">
+          <button
+            className="section-title regions-toggle"
+            onClick={() => setRegionsOpen((prev) => !prev)}
+          >
+            Regions
+            <span className={`regions-arrow ${regionsOpen ? "open" : ""}`}>
+              ▼
+            </span>
+          </button>
+          <div className={`regions-grid-wrapper ${regionsOpen ? "open" : ""}`}>
+            <div className="regions-grid">
+              {country.regions.map((region, i) => (
+                <div key={i} className="region-card">
+                  <span className="region-icon">{region.icon}</span>
+                  <div className="region-info">
+                    <h3 className="region-name">{region.name}</h3>
+                    <p className="region-description">{region.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {country && country.meta && country.meta.length > 0 && (
         <section className="resources-section">
           <h2 className="section-title">Meta</h2>
@@ -62,7 +90,9 @@ const CountryDetail: React.FC = () => {
               <div key={i} className="key-data-item">
                 <dd>{item.value}</dd>
                 <span className={`meta-tag-dot ${item.tag}`} />
-                <span className="meta-tag-text">{item.tag.replace("_", " ")}</span>
+                <span className="meta-tag-text">
+                  {item.tag.replace("_", " ")}
+                </span>
               </div>
             ))}
           </dl>
@@ -110,7 +140,9 @@ const CountryDetail: React.FC = () => {
                   rel="noopener noreferrer"
                   className="resource-link"
                 >
-                  <span className={`platform-icon ${video.platform ?? "other"}`}>
+                  <span
+                    className={`platform-icon ${video.platform ?? "other"}`}
+                  >
                     {video.platform === "youtube" ? "▶" : "🎬"}
                   </span>
                   {video.label}

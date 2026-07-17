@@ -33,6 +33,12 @@ export interface Meta {
   tag: Difficulty;
 }
 
+export interface Region {
+  name: string;
+  icon?: string;
+  description?: string;
+}
+
 export interface Country {
   id: string; // ISO Code (e.g., 'ES' for Spain)
   name: string;
@@ -43,4 +49,5 @@ export interface Country {
   images?: CountryImage[];
   videos?: VideoLink[];
   meta?: Meta[];
+  regions?: Region[];
 }
