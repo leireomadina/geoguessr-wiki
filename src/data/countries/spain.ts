@@ -9,7 +9,12 @@ const country: Country = {
   studyLinks: [
     { label: "Plonkit Guide", url: "https://www.plonkit.net/spain" },
   ],
-  regions: [],
+  regions: [
+    {
+      name: "Basque Country",
+      description: "Home of The Queen Goddess Divine",
+    },
+  ],
 };
 
 export default country;
