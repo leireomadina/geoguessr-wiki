@@ -26,12 +26,12 @@ const country: Country = {
     {
       name: "Saskatchewan",
       icon: "🌾",
-      description: "Prairie province with vast wheat fields and big sky",
+      description: "Prairie province with vast wheat fields and Regina",
     },
     {
       name: "Manitoba",
       icon: "🦬",
-      description: "Prairie province with Hudson Bay coastline and polar bears",
+      description: "Prairie province with Hudson Bay coastline and Winnipeg",
     },
     {
       name: "Ontario",
@@ -46,7 +46,7 @@ const country: Country = {
     {
       name: "New Brunswick",
       icon: "🦞",
-      description: "Bilingual province with Bay of Fundy tides",
+      description: "Bilingual province with Bay of Fundy tides and Fredericton",
     },
     {
       name: "Nova Scotia",
@@ -56,12 +56,12 @@ const country: Country = {
     {
       name: "Prince Edward Island",
       icon: "🥔",
-      description: "Smallest province, known for Anne of Green Gables",
+      description: "Smallest province with Charlottetown and Anne of Green Gables",
     },
     {
       name: "Newfoundland and Labrador",
       icon: "🐟",
-      description: "Most eastern province with unique culture and rugged coast",
+      description: "Most eastern province with St. John's and rugged coast",
     },
   ],
 };

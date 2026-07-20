@@ -13,12 +13,12 @@ const country: Country = {
     {
       name: "Hokkaido",
       icon: "❄️",
-      description: "Northernmost island, known for snow festivals and wildlife",
+      description: "Northernmost island, known for snow festivals and Sapporo",
     },
     {
       name: "Tohoku",
       icon: "🌸",
-      description: "Northern Honshu region with hot springs and autumn foliage",
+      description: "Northern Honshu with hot springs, autumn foliage, and Sendai",
     },
     {
       name: "Kanto",
@@ -29,12 +29,12 @@ const country: Country = {
       name: "Hokoriku",
       icon: "🏔️",
       description:
-        "Sea of Japan coast with heavy snowfall and traditional towns",
+        "Sea of Japan coast with heavy snowfall, traditional towns, and Kanazawa",
     },
     {
       name: "Chubu",
       icon: "🗻",
-      description: "Central region including Mount Fuji and the Japanese Alps",
+      description: "Central region with Mount Fuji, the Japanese Alps, and Nagoya",
     },
     {
       name: "Chugoku",
@@ -49,17 +49,17 @@ const country: Country = {
     {
       name: "Shikoku",
       icon: "🌊",
-      description: "Smallest main island with 88 temple pilgrimage route",
+      description: "Smallest main island with 88 temple pilgrimage and Matsuyama",
     },
     {
       name: "Kyushu",
       icon: "🌋",
-      description: "Southern island with volcanoes and hot springs",
+      description: "Southern island with volcanoes, hot springs, and Fukuoka",
     },
     {
       name: "Okinawa",
       icon: "🏝️",
-      description: "Tropical subtropical islands with unique Ryukyu culture",
+      description: "Tropical islands with unique Ryukyu culture and Naha",
     },
   ],
 };
