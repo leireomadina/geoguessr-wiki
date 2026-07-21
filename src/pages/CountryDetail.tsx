@@ -68,15 +68,27 @@ const CountryDetail: React.FC = () => {
           </button>
           <div className={`regions-grid-wrapper ${regionsOpen ? "open" : ""}`}>
             <div className="regions-grid">
-              {country.regions.map((region, i) => (
-                <div key={i} className="region-card">
-                  <span className="region-icon">{region.icon}</span>
+              {country.regions.length > 0 ? (
+                country.regions.map((region, i) => (
+                  <div key={i} className="region-card">
+                    <span className="region-icon">{region.icon}</span>
+                    <div className="region-info">
+                      <h3 className="region-name">{region.name}</h3>
+                      <p className="region-description">{region.description}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="region-card region-placeholder">
+                  <span className="region-icon">🚧</span>
                   <div className="region-info">
-                    <h3 className="region-name">{region.name}</h3>
-                    <p className="region-description">{region.description}</p>
+                    <h3 className="region-name">Coming soon</h3>
+                    <p className="region-description">
+                      Regions for this country are currently being prepared. Check back later!
+                    </p>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>

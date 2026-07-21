@@ -344,6 +344,10 @@
   line-height: 1.4;
 }
 
+.region-placeholder {
+  border-style: dashed;
+}
+
 .empty-resources {
   font-size: 1rem;
   font-weight: 700;
