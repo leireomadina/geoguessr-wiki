@@ -7,7 +7,7 @@ import "@/styles/CountryDetail.css";
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [regionsOpen, setRegionsOpen] = useState(false);
+  const [regionsOpen, setRegionsOpen] = useState(true);
 
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
@@ -55,9 +55,26 @@ const CountryDetail: React.FC = () => {
         </div>
       </section>
 
+      {country && country.meta && country.meta.length > 0 && (
+        <section className="resources-section">
+          <h2 className="section-title">Meta</h2>
+          <dl className="key-data-grid">
+            {country.meta.map((item, i) => (
+              <div key={i} className="key-data-item">
+                <dd>{item.value}</dd>
+                <span className={`meta-tag-dot ${item.tag}`} />
+                <span className="meta-tag-text">
+                  {item.tag.replace("_", " ")}
+                </span>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
       {country && country.regions && (
         <section className="resources-section">
-          <button
+          <h2
             className="section-title regions-toggle"
             onClick={() => setRegionsOpen((prev) => !prev)}
           >
@@ -65,7 +82,7 @@ const CountryDetail: React.FC = () => {
             <span className={`regions-arrow ${regionsOpen ? "open" : ""}`}>
               ▼
             </span>
-          </button>
+          </h2>
           <div className={`regions-grid-wrapper ${regionsOpen ? "open" : ""}`}>
             <div className="regions-grid">
               {country.regions.length > 0 ? (
@@ -74,6 +91,9 @@ const CountryDetail: React.FC = () => {
                     <span className="region-icon">{region.icon}</span>
                     <div className="region-info">
                       <h3 className="region-name">{region.name}</h3>
+                      {region.cities && (
+                        <p className="region-cities">{region.cities}</p>
+                      )}
                       <p className="region-description">{region.description}</p>
                     </div>
                   </div>
@@ -91,23 +111,6 @@ const CountryDetail: React.FC = () => {
               )}
             </div>
           </div>
-        </section>
-      )}
-
-      {country && country.meta && country.meta.length > 0 && (
-        <section className="resources-section">
-          <h2 className="section-title">Meta</h2>
-          <dl className="key-data-grid">
-            {country.meta.map((item, i) => (
-              <div key={i} className="key-data-item">
-                <dd>{item.value}</dd>
-                <span className={`meta-tag-dot ${item.tag}`} />
-                <span className="meta-tag-text">
-                  {item.tag.replace("_", " ")}
-                </span>
-              </div>
-            ))}
-          </dl>
         </section>
       )}
 

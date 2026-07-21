@@ -36,6 +36,7 @@ export interface Meta {
 export interface Region {
   name: string;
   icon?: string;
+  cities?: string;
   description?: string;
 }
 

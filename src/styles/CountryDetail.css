@@ -263,7 +263,9 @@
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease;
 }
 
 .regions-grid-wrapper.open {
@@ -273,7 +275,6 @@
 }
 
 .regions-toggle {
-  background: none;
   border: none;
   padding: 0;
   margin: 0 0 1rem;
@@ -281,13 +282,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #000000;
-  font-size: 2.5rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  font-family: inherit;
 }
 
 .regions-arrow {
@@ -335,6 +329,15 @@
   letter-spacing: 0.03em;
   margin: 0;
   color: #000000;
+}
+
+.region-cities {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: #4c1d95;
 }
 
 .region-description {
