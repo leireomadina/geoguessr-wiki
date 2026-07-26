@@ -7,7 +7,7 @@ import "@/styles/CountryDetail.css";
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [regionsOpen, setRegionsOpen] = useState(true);
+  const [isRegionToggleOpen, setRegionToggleOpen] = useState(true);
 
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
@@ -76,14 +76,14 @@ const CountryDetail: React.FC = () => {
         <section className="resources-section">
           <h2
             className="section-title regions-toggle"
-            onClick={() => setRegionsOpen((prev) => !prev)}
+            onClick={() => setRegionToggleOpen((prev) => !prev)}
           >
             Regions
-            <span className={`regions-arrow ${regionsOpen ? "open" : ""}`}>
+            <span className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}>
               ▼
             </span>
           </h2>
-          <div className={`regions-grid-wrapper ${regionsOpen ? "open" : ""}`}>
+          <div className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}>
             <div className="regions-grid">
               {country.regions.length > 0 ? (
                 country.regions.map((region, i) => (
