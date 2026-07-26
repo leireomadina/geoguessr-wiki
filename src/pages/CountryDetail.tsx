@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { countries } from "@/data/countries";
 import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
+import RegionCard from "@/components/RegionCard";
 
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -87,16 +88,7 @@ const CountryDetail: React.FC = () => {
             <div className="regions-grid">
               {country.regions.length > 0 ? (
                 country.regions.map((region, i) => (
-                  <div key={i} className="region-card">
-                    <span className="region-icon">{region.icon}</span>
-                    <div className="region-info">
-                      <h3 className="region-name">{region.name}</h3>
-                      {region.cities && (
-                        <p className="region-cities">{region.cities}</p>
-                      )}
-                      <p className="region-description">{region.description}</p>
-                    </div>
-                  </div>
+                  <RegionCard key={i} region={region} />
                 ))
               ) : (
                 <div className="region-card region-placeholder">
