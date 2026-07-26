@@ -1,5 +1,6 @@
 import React from "react";
 import type { Region } from "@/types/country";
+import "@/styles/RegionCard.css";
 
 interface RegionCardProps {
   region: Region;
