@@ -12,6 +12,7 @@ const country: Country = {
       url: "https://www.plonkit.net/south-africa",
     },
   ],
+  regions: [],
 };
 
 export default country;

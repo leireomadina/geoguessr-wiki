@@ -9,6 +9,7 @@ const country: Country = {
   studyLinks: [
     { label: "Plonkit Guide", url: "https://www.plonkit.net/ecuador" },
   ],
+  regions: [],
 };
 
 export default country;

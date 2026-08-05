@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { countries } from "@/data/countries";
 import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
+import RegionCard from "@/components/RegionCard";
 
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isRegionToggleOpen, setRegionToggleOpen] = useState(true);
 
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
@@ -62,10 +64,45 @@ const CountryDetail: React.FC = () => {
               <div key={i} className="key-data-item">
                 <dd>{item.value}</dd>
                 <span className={`meta-tag-dot ${item.tag}`} />
-                <span className="meta-tag-text">{item.tag.replace("_", " ")}</span>
+                <span className="meta-tag-text">
+                  {item.tag.replace("_", " ")}
+                </span>
               </div>
             ))}
           </dl>
+        </section>
+      )}
+
+      {country && country.regions && (
+        <section className="resources-section">
+          <h2
+            className="section-title regions-toggle"
+            onClick={() => setRegionToggleOpen((prev) => !prev)}
+          >
+            Regions
+            <span className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}>
+              ▼
+            </span>
+          </h2>
+          <div className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}>
+            <div className="regions-grid">
+              {country.regions.length > 0 ? (
+                country.regions.map((region, i) => (
+                  <RegionCard key={i} region={region} />
+                ))
+              ) : (
+                <div className="region-card region-placeholder">
+                  <span className="region-icon">🚧</span>
+                  <div className="region-info">
+                    <h3 className="region-name">Coming soon</h3>
+                    <p className="region-description">
+                      Regions for this country are currently being prepared. Check back later!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </section>
       )}
 
@@ -110,7 +147,9 @@ const CountryDetail: React.FC = () => {
                   rel="noopener noreferrer"
                   className="resource-link"
                 >
-                  <span className={`platform-icon ${video.platform ?? "other"}`}>
+                  <span
+                    className={`platform-icon ${video.platform ?? "other"}`}
+                  >
                     {video.platform === "youtube" ? "▶" : "🎬"}
                   </span>
                   {video.label}
