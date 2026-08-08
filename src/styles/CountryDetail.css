@@ -317,8 +317,6 @@
 }
 
 .region-detail-panel {
-  border: 4px solid var(--line);
-  box-shadow: 8px 8px 0px 0px var(--shadow-hard);
   padding: 2rem;
   background: var(--card-bg);
   display: flex;
@@ -364,6 +362,10 @@
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.5;
+}
+
+.region-detail-coming-soon {
+  margin-top: 1.5rem;
 }
 
 .empty-resources {

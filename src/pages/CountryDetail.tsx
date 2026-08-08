@@ -159,6 +159,15 @@ const CountryDetail: React.FC = () => {
                       <p className="region-detail-description">
                         {country.regions[selectedRegion].description}
                       </p>
+                      <div className="region-card region-placeholder region-detail-coming-soon">
+                        <span className="region-icon">🚧</span>
+                        <div className="region-info">
+                          <h3 className="region-name">Coming soon</h3>
+                          <p className="region-description">
+                            More info about this region is being prepared. Check back later!
+                          </p>
+                        </div>
+                      </div>
                     </>
                   )}
                 </aside>
