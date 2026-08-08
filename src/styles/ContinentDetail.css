@@ -48,7 +48,7 @@
 
 .stats-text {
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--ink-soft);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -62,7 +62,7 @@
   letter-spacing: -0.05em;
   line-height: 0.9;
   text-transform: uppercase;
-  color: #000000;
+  color: var(--ink);
 }
 
 .back-arrow-btn {
@@ -72,14 +72,14 @@
   margin: 0;
   font-size: 2.25rem;
   font-weight: 900;
-  color: var(--bg-dark);
+  color: var(--ink);
   cursor: pointer;
   display: inline-flex;
   transition: all 0.2s;
 }
 
 .back-arrow-btn:hover {
-  color: #4c1d95;
+  color: var(--accent-deep);
   transform: translateX(-8px);
 }
 
@@ -98,8 +98,9 @@
   font-size: 1.2rem;
   font-weight: 700;
   border: none;
-  border-bottom: 4px solid #000000;
+  border-bottom: 4px solid var(--line);
   background-color: transparent;
+  color: var(--ink);
   box-shadow: none;
   outline: none;
   transition: all 0.2s;
@@ -108,12 +109,12 @@
 }
 
 .search-input:focus {
-  border-bottom-color: #4c1d95;
+  border-bottom-color: var(--accent-deep);
   padding-left: 1.5rem;
 }
 
 .search-input::placeholder {
-  color: #000000;
+  color: var(--ink);
   opacity: 0.3;
   text-transform: uppercase;
   font-weight: 700;
@@ -126,8 +127,9 @@
   font-size: 1rem;
   font-weight: 700;
   border: none;
-  border-bottom: 4px solid #000000;
-  background-color: transparent;
+  border-bottom: 4px solid var(--line);
+  background-color: var(--bg);
+  color: var(--ink);
   box-shadow: none;
   outline: none;
   transition: all 0.2s;
@@ -138,7 +140,7 @@
 }
 
 .difficulty-filter:focus {
-  border-bottom-color: #4c1d95;
+  border-bottom-color: var(--accent-deep);
 }
 
 .country-grid {
@@ -152,8 +154,8 @@
   grid-column: 1 / -1;
   padding: 4rem 2rem;
   text-align: center;
-  background: #f3f4f6;
-  border: 4px dashed #000000;
+  background: var(--surface);
+  border: 4px dashed var(--line);
 }
 
 .no-results p {
@@ -161,7 +163,7 @@
   font-weight: 800;
   text-transform: uppercase;
   margin: 0;
-  color: #000000;
+  color: var(--ink);
 }
 
 @media (max-width: 600px) {

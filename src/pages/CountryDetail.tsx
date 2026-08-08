@@ -4,6 +4,7 @@ import { countries } from "@/data/countries";
 import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
+import type { Difficulty } from "@/types/country";
 
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,15 @@ const CountryDetail: React.FC = () => {
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
   );
+
+  const difficultyOrder: Difficulty[] = ["easy", "medium", "hard", "very_hard"];
+
+  const sortedMeta = country?.meta
+    ? [...country.meta].sort(
+        (a, b) =>
+          difficultyOrder.indexOf(a.tag) - difficultyOrder.indexOf(b.tag),
+      )
+    : [];
 
   return (
     <div className="country-detail-container">
@@ -60,13 +70,15 @@ const CountryDetail: React.FC = () => {
         <section className="resources-section">
           <h2 className="section-title">Meta</h2>
           <dl className="key-data-grid">
-            {country.meta.map((item, i) => (
+            {sortedMeta.map((item, i) => (
               <div key={i} className="key-data-item">
                 <dd>{item.value}</dd>
-                <span className={`meta-tag-dot ${item.tag}`} />
-                <span className="meta-tag-text">
-                  {item.tag.replace("_", " ")}
-                </span>
+                <div className="meta-tag-row">
+                  <span className={`meta-tag-dot ${item.tag}`} />
+                  <span className="meta-tag-text">
+                    {item.tag.replace("_", " ")}
+                  </span>
+                </div>
               </div>
             ))}
           </dl>

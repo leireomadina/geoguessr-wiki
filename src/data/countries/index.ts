@@ -10,6 +10,8 @@ import southAfrica from "./south-africa";
 import canada from "./canada";
 import usa from "./usa";
 import australia from "./australia";
+import newZealand from "./new-zealand";
+import thailand from "./thailand";
 import argentina from "./argentina";
 import bolivia from "./bolivia";
 import chile from "./chile";
@@ -30,6 +32,8 @@ export const countries: Country[] = [
   canada,
   usa,
   australia,
+  newZealand,
+  thailand,
   argentina,
   bolivia,
   chile,

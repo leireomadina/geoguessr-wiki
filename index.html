@@ -4,7 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geoguessr-wiki</title>
+    <title>Geoguessr wiki</title>
+    <script>
+      // Applies the saved theme (or the OS preference) before the first paint,
+      // preventing a flash of the wrong theme. Must stay inline in <head>:
+      // module scripts are deferred and would run too late.
+      (() => {
+        try {
+          let theme = localStorage.getItem('theme');
+          if (theme !== 'dark' && theme !== 'light') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          }
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
