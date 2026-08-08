@@ -10,7 +10,7 @@ const country: Country = {
     { label: "Plonkit Guide", url: "https://www.plonkit.net/peru" },
   ],
   regions: [
-    // Costa
+    // Coast
     { name: "Tumbes", icon: "🏖️", cities: "Tumbes", description: "Northernmost coast, hot with mangrove swamps" },
     { name: "Piura", icon: "🏜️", cities: "Piura", description: "Dry northern coast and desert" },
     { name: "Lambayeque", icon: "🏛️", cities: "Chiclayo", description: "Coast with ancient adobe ruins" },
@@ -22,7 +22,7 @@ const country: Country = {
     { name: "Arequipa", icon: "🌋", cities: "Arequipa", description: "White volcanic-stone city near the Misti volcano" },
     { name: "Moquegua", icon: "🏜️", cities: "Moquegua", description: "Dry southern valleys" },
     { name: "Tacna", icon: "🏜️", cities: "Tacna", description: "Southernmost region on the Chile border" },
-    // Sierra
+    // Highlands
     { name: "Cajamarca", icon: "🌾", cities: "Cajamarca", description: "Northern highlands, green valleys and dairy" },
     { name: "Huánuco", icon: "🌄", cities: "Huánuco", description: "High jungle and mountain valleys" },
     { name: "Pasco", icon: "⛏️", cities: "Cerro de Pasco", description: "High mining plateau" },
@@ -32,7 +32,7 @@ const country: Country = {
     { name: "Apurímac", icon: "🏔️", cities: "Abancay", description: "Deep river canyons in the Andes" },
     { name: "Cusco", icon: "🦙", cities: "Cusco", description: "Sacred valley, Machu Picchu, alpacas" },
     { name: "Puno", icon: "🌊", cities: "Puno", description: "Altiplano on Lake Titicaca" },
-    // Selva
+    // Jungle
     { name: "Amazonas", icon: "🌳", cities: "Chachapoyas", description: "Cloud forests with cliff tombs" },
     { name: "San Martín", icon: "🌴", cities: "Moyobamba", description: "Jungle with rolling green hills" },
     { name: "Loreto", icon: "🌴", cities: "Iquitos", description: "Amazon rainforest around the great rivers" },

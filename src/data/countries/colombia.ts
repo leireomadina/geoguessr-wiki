@@ -35,19 +35,19 @@ const country: Country = {
     { name: "Quindío", icon: "🌴", cities: "Armenia", description: "Smallest department, coffee plantations" },
     { name: "Tolima", icon: "🌋", cities: "Ibagué", description: "Andean valleys with the Nevado del Tolima" },
     { name: "Huila", icon: "🌋", cities: "Neiva", description: "Upper Magdalena valley, arid and mountainous" },
-    // Orinoquía
+    // Orinoquia
     { name: "Arauca", icon: "🌾", cities: "Arauca", description: "Hot plains on the Venezuela border" },
     { name: "Casanare", icon: "🌾", cities: "Yopal", description: "Eastern llanos, cattle and oil" },
     { name: "Meta", icon: "🌅", cities: "Villavicencio", description: "Gateway to the vast eastern plains" },
     { name: "Vichada", icon: "🌾", cities: "Puerto Carreño", description: "Remote flat savanna, sparsely populated" },
-    // Amazonía
+    // Amazon
     { name: "Putumayo", icon: "🌳", cities: "Mocoa", description: "Amazon rainforest in the southwest" },
     { name: "Amazonas", icon: "🌴", cities: "Leticia", description: "Southern Amazon on the river border" },
     { name: "Caquetá", icon: "🌳", cities: "Florencia", description: "Amazon lowlands with rolling hills" },
     { name: "Guaviare", icon: "🌳", cities: "San José del Guaviare", description: "Jungle between the Andes and the Amazon" },
     { name: "Vaupés", icon: "🌴", cities: "Mitú", description: "Remote eastern Amazon, indigenous territory" },
     { name: "Guainía", icon: "🌴", cities: "Inírida", description: "Easternmost, rivers and rainforest" },
-    // Insular
+    // Islands
     { name: "San Andrés y Providencia", icon: "🏖️", cities: "San Andrés", description: "Caribbean islands with coral beaches" },
   ],
 };
