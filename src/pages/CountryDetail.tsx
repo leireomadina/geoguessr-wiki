@@ -73,10 +73,12 @@ const CountryDetail: React.FC = () => {
             {sortedMeta.map((item, i) => (
               <div key={i} className="key-data-item">
                 <dd>{item.value}</dd>
-                <span className={`meta-tag-dot ${item.tag}`} />
-                <span className="meta-tag-text">
-                  {item.tag.replace("_", " ")}
-                </span>
+                <div className="meta-tag-row">
+                  <span className={`meta-tag-dot ${item.tag}`} />
+                  <span className="meta-tag-text">
+                    {item.tag.replace("_", " ")}
+                  </span>
+                </div>
               </div>
             ))}
           </dl>
