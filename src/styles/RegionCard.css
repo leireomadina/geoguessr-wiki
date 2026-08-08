@@ -47,3 +47,19 @@
 .region-placeholder {
   border-style: dashed;
 }
+
+.region-card.selectable {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.region-card.selectable:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 12px 12px 0px 0px var(--accent-deep);
+}
+
+.region-card.selected {
+  border-color: var(--accent-deep);
+  box-shadow: 8px 8px 0px 0px var(--accent-deep);
+  transform: translate(-2px, -2px);
+}
