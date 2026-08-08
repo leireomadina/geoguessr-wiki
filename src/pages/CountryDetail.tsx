@@ -5,6 +5,7 @@ import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
 import type { Difficulty } from "@/types/country";
+import NotFound from "./NotFound";
 
 const CountryDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,10 @@ const CountryDetail: React.FC = () => {
           difficultyOrder.indexOf(a.tag) - difficultyOrder.indexOf(b.tag),
       )
     : [];
+
+  if (!country) {
+    return <NotFound />;
+  }
 
   return (
     <div className="country-detail-container">
