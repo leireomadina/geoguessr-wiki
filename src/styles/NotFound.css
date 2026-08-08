@@ -1,0 +1,41 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  gap: 1rem;
+}
+
+.not-found-code {
+  font-size: 6rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  color: var(--accent-deep);
+}
+
+.not-found-text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.25rem;
+}
+
+.not-found-link {
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid var(--line);
+  background: var(--card-bg);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.not-found-link:hover {
+  background: var(--ink);
+  color: var(--card-bg);
+}
