@@ -9,6 +9,17 @@ const country: Country = {
   studyLinks: [
     { label: "Plonkit Guide", url: "https://www.plonkit.net/thailand" },
   ],
+  meta: [
+    { label: "meta", value: "Thai script", tag: "easy" },
+    { label: "meta", value: "Concrete roads", tag: "easy" },
+    { label: "meta", value: "Long thin lamp posts", tag: "easy" },
+    { label: "meta", value: "Green big signs with thai script", tag: "easy" },
+    { label: "meta", value: "Square poles with holes", tag: "medium" },
+    { label: "meta", value: "Black & white striped bollards", tag: "medium" },
+    { label: "meta", value: "Yellow middle lines", tag: "medium" },
+     { label: "meta", value: "Black & white or red & black striped bottom poles", tag: "medium" },
+    { label: "meta", value: "Royal flags (mostly yellow)", tag: "hard" },
+  ],
   regions: [
     {
       name: "Northern Thailand",
