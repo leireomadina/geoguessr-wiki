@@ -137,31 +137,49 @@ const RegionMap: React.FC<RegionMapProps> = ({
   if (!map) return null;
 
   return (
-    <svg
-      ref={svgRef}
-      className="region-map"
-      viewBox={map.viewBox}
-      role="group"
-      aria-label="Interactive region map - click a region to see its details"
-    >
-      {regions.map((region, i) => {
-        const shape = map.regions[region.name];
-        if (!shape) return null;
-        return (
-          <g
-            key={region.name}
-            onClick={() => onSelect(i)}
-            className={`region-map-group${i === selectedIndex ? " selected" : ""}`}
-          >
-            <path
-              className={`region-shape${i === selectedIndex ? " selected" : ""}`}
-              d={shape.d}
-            />
-            <text className="region-label">{shape.label}</text>
-          </g>
-        );
-      })}
-    </svg>
+    <>
+      <svg
+        ref={svgRef}
+        className="region-map"
+        viewBox={map.viewBox}
+        role="group"
+        aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
+      >
+        {regions.map((region, i) => {
+          const shape = map.regions[region.name];
+          if (!shape) return null;
+          const selected = i === selectedIndex;
+          return (
+            <g
+              key={region.name}
+              role="button"
+              tabIndex={0}
+              aria-label={`Select ${region.name}`}
+              aria-pressed={selected}
+              onClick={() => onSelect(i)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelect(i);
+                }
+              }}
+              className={`region-map-group${selected ? " selected" : ""}`}
+            >
+              <path
+                className={`region-shape${selected ? " selected" : ""}`}
+                d={shape.d}
+              />
+              <text className="region-label">{shape.label}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <span className="sr-only" aria-live="polite">
+        {regions[selectedIndex]
+          ? `${regions[selectedIndex].name} selected`
+          : ""}
+      </span>
+    </>
   );
 };
 
