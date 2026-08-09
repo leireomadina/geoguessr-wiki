@@ -14,14 +14,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve(import.meta.dirname, 'src')
     }
   },
   test: {
     environment: 'jsdom',
     // Runs once per test file: imports jest-dom matchers, mocks matchMedia,
     // resets localStorage between tests.
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./src/test-utils/setup.ts'],
     // Mock CSS imports instead of processing them: components import *.css but
     // tests never assert on styles, and parsing every stylesheet slows runs.
     css: false

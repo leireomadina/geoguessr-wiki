@@ -4,7 +4,7 @@ import { countries } from "@/data/countries";
 import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
-import type { Difficulty } from "@/types/country";
+import { DIFFICULTIES } from "@/data/enums";
 import NotFound from "./NotFound";
 
 const CountryDetail: React.FC = () => {
@@ -16,7 +16,7 @@ const CountryDetail: React.FC = () => {
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
   );
 
-  const difficultyOrder: Difficulty[] = ["easy", "medium", "hard", "very_hard"];
+  const difficultyOrder = DIFFICULTIES;
 
   const sortedMeta = country?.meta
     ? [...country.meta].sort(

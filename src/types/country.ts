@@ -1,12 +1,10 @@
-export type Difficulty = "easy" | "medium" | "hard" | "very_hard";
-export type DrivingSide = "left" | "right";
-export type Continent =
-  | "Africa"
-  | "Asia"
-  | "Europe"
-  | "North America"
-  | "Oceania"
-  | "South America";
+import type { CONTINENTS, DIFFICULTIES, DRIVING_SIDES } from "@/data/enums";
+
+export type Difficulty = (typeof DIFFICULTIES)[number];
+
+export type DrivingSide = (typeof DRIVING_SIDES)[number];
+
+export type Continent = (typeof CONTINENTS)[number];
 
 export interface StudyLink {
   label: string;
