@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef } from "react";
 import type { Region } from "@/types/country";
 import { getRegionMap } from "@/data/regionMaps";
+import { assignRegionColors } from "@/data/regionColors";
 import "@/styles/RegionMap.css";
 
 interface RegionMapProps {
@@ -46,7 +47,8 @@ const RegionMap: React.FC<RegionMapProps> = ({
   // or placed beside the shape when the shape is too small for the text.
   // The shape's box comes from its main sub-path only: source maps sometimes
   // include tiny extra sub-paths (e.g. a dot in a corner) that would drag
-  // the label off the actual region.
+  // the label off the actual region. The same boxes also drive the automatic
+  // fill colors, which are assigned once so adjacent shapes never match.
   useLayoutEffect(() => {
     const svg = svgRef.current;
     if (!svg || !map) return;
@@ -73,14 +75,26 @@ const RegionMap: React.FC<RegionMapProps> = ({
       return best;
     };
 
-    for (const group of Array.from(
+    const groups = Array.from(
       svg.querySelectorAll<SVGGElement>(".region-map-group")
-    )) {
+    );
+
+    const boxes = groups.map((group) => {
+      const path = group.querySelector<SVGPathElement>(".region-shape");
+      return path ? mainBox(path) : undefined;
+    });
+    const colors = assignRegionColors(boxes);
+
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
       const path = group.querySelector<SVGPathElement>(".region-shape");
       const text = group.querySelector<SVGTextElement>(".region-label");
       if (!path || !text) continue;
-      const box = mainBox(path);
+      const box = boxes[i];
       if (!box) continue;
+
+      path.style.fill = colors[i] ?? "";
+
       const textBox = text.getBBox();
       const cx = box.x + box.width / 2;
       const cy = box.y + box.height / 2;
@@ -120,9 +134,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
             className={`region-map-group${i === selectedIndex ? " selected" : ""}`}
           >
             <path
-              className={`region-shape ${shape.cssClass}${
-                i === selectedIndex ? " selected" : ""
-              }`}
+              className={`region-shape${i === selectedIndex ? " selected" : ""}`}
               d={shape.d}
             />
             <text className="region-label">{shape.label}</text>

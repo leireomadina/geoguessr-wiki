@@ -59,7 +59,8 @@
 }
 
 .region-card.selected {
-  border-color: var(--accent-deep);
+  border-color: var(--accent);
+  background: var(--accent-bg);
   box-shadow: 8px 8px 0px 0px var(--accent-deep);
   transform: translate(-2px, -2px);
 }

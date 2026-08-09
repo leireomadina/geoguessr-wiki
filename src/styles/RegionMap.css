@@ -1,6 +1,5 @@
 .region-map-frame {
   padding: 1rem;
-  background: var(--card-bg);
   display: flex;
   justify-content: center;
 }
@@ -29,31 +28,6 @@
   stroke-width: 3.5;
   opacity: 1;
   filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
-}
-
-.region-shape.shape-wa {
-  fill: #fbbf24;
-}
-.region-shape.shape-nt {
-  fill: #a78bfa;
-}
-.region-shape.shape-qld {
-  fill: #38bdf8;
-}
-.region-shape.shape-sa {
-  fill: #f472b6;
-}
-.region-shape.shape-nsw {
-  fill: #4ade80;
-}
-.region-shape.shape-vic {
-  fill: #fb923c;
-}
-.region-shape.shape-tas {
-  fill: #34d399;
-}
-.region-shape.shape-act {
-  fill: #f87171;
 }
 
 .region-label {

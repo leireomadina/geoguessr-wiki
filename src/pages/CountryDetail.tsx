@@ -27,7 +27,7 @@ const CountryDetail: React.FC = () => {
       )
     : [];
 
-  const hasRegionMap = country?.id === "AU";
+  const hasRegionMap = country?.id === "AU" || country?.id === "CZ";
 
   if (!country) {
     return <NotFound />;

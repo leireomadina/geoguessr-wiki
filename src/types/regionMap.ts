@@ -2,15 +2,14 @@
  * A single renderable region on the map:
  * - `d`: SVG path data (`d` attribute) copied exactly as-is from the source map; draws the region's outline.
  * - `label`: text shown near the shape on the map; short acronyms for long names (e.g. "NSW").
- * - `cssClass`: CSS class applied to the rendered shape (e.g. "shape-nsw"), styled in RegionMap.css.
  *
- * The label's position is computed automatically from the shape's center, so there are no
- * hand-picked coordinates to maintain.
+ * The label's position and the shape's fill color are computed automatically
+ * (from the shape's center and a warm/cool palette), so there are no hand-picked
+ * coordinates or per-region CSS classes to maintain.
  */
 export interface RegionShape {
   d: string;
   label: string;
-  cssClass: string;
 }
 
 /**

@@ -1,4 +1,5 @@
 import australiaLow from "@/assets/maps/australiaLow.svg?raw";
+import czechiaLow from "@/assets/maps/czechiaLow.svg?raw";
 import type { RegionMap, RegionMapConfig, RegionShape } from "@/types/regionMap";
 
 const MAP_CONFIGS: Record<string, RegionMapConfig> = {
@@ -6,14 +7,34 @@ const MAP_CONFIGS: Record<string, RegionMapConfig> = {
     viewBox: "0 0 500 600",
     svg: australiaLow,
     labels: {
-      "Northern Territory": { label: "NT", cssClass: "shape-nt" },
-      "Western Australia": { label: "WA", cssClass: "shape-wa" },
-      "Australian Capital Territory": { label: "ACT", cssClass: "shape-act" },
-      "New South Wales": { label: "NSW", cssClass: "shape-nsw" },
-      "South Australia": { label: "SA", cssClass: "shape-sa" },
-      "Victoria": { label: "Victoria", cssClass: "shape-vic" },
-      "Queensland": { label: "Queensland", cssClass: "shape-qld" },
-      "Tasmania": { label: "Tasmania", cssClass: "shape-tas" },
+      "Northern Territory": { label: "NT" },
+      "Western Australia": { label: "WA" },
+      "Australian Capital Territory": { label: "ACT" },
+      "New South Wales": { label: "NSW" },
+      "South Australia": { label: "SA" },
+      "Victoria": { label: "Victoria" },
+      "Queensland": { label: "Queensland" },
+      "Tasmania": { label: "Tasmania" },
+    },
+  },
+  CZ: {
+    viewBox: "0 440 612 355",
+    svg: czechiaLow,
+    labels: {
+      "Praha": { label: "Prague" },
+      "Středočeský kraj": { label: "Středoč." },
+      "Jihočeský kraj": { label: "Jihoč." },
+      "Plzeňský kraj": { label: "Plzeň" },
+      "Karlovarský kraj": { label: "Karl. Vary" },
+      "Ústecký kraj": { label: "Ústí n.L." },
+      "Liberecký kraj": { label: "Liberec" },
+      "Královéhradecký kraj": { label: "Hr. Králové" },
+      "Pardubický kraj": { label: "Pardubice" },
+      "Vysočina": { label: "Vysočina" },
+      "Jihomoravský kraj": { label: "Jihomor." },
+      "Olomoucký kraj": { label: "Olom." },
+      "Zlínský kraj": { label: "Zlín" },
+      "Moravskoslezský kraj": { label: "Morav." },
     },
   },
 };
@@ -40,7 +61,7 @@ export function getRegionMap(countryId: string): RegionMap | undefined {
   for (const path of Array.from(doc.querySelectorAll("path"))) {
     const name = path.getAttribute("title"); // e.g. "New South Wales" (from the amCharts file)
     const d = path.getAttribute("d");
-    const label = name ? config.labels[name] : undefined; // e.g. { label: "NSW", cssClass: "shape-nsw" }
+    const label = name ? config.labels[name] : undefined; // e.g. { label: "NSW" }
 
     if (name && d && label) {
       regions[name] = { d, ...label };

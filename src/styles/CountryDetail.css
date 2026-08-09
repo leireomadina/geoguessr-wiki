@@ -318,7 +318,6 @@
 
 .region-detail-panel {
   padding: 2rem;
-  background: var(--card-bg);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
