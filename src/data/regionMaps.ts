@@ -74,14 +74,15 @@ const parsedCache = new Map<string, RegionMap>();
 // Extracts each `<path>`'s `title` (region name) and `d` (shape data) from a
 // raw SVG string. Knows nothing about labels or configs.
 export function parseSvgRegions(svg: string): Record<string, string> {
-  const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+  const svgDocument = new DOMParser().parseFromString(svg, "image/svg+xml");
   const regions: Record<string, string> = {};
 
-  for (const path of Array.from(doc.querySelectorAll("path"))) {
-    const name = path.getAttribute("title");
-    const d = path.getAttribute("d");
-    if (name && d) {
-      regions[name] = d;
+  for (const pathElement of Array.from(svgDocument.querySelectorAll("path"))) {
+    const name = pathElement.getAttribute("title");
+    const pathData = pathElement.getAttribute("d");
+
+    if (name && pathData) {
+      regions[name] = pathData;
     }
   }
 
@@ -96,11 +97,11 @@ export function matchLabels(
 ): Record<string, RegionShape> {
   const regions: Record<string, RegionShape> = {};
 
-  for (const [name, d] of Object.entries(shapes)) {
+  for (const [name, pathData] of Object.entries(shapes)) {
     if (labels[name]) {
-      regions[name] = { d, ...labels[name] };
+      regions[name] = { d: pathData, ...labels[name] };
     } else {
-      regions[name] = { d, label: name };
+      regions[name] = { d: pathData, label: name };
     }
   }
 
@@ -114,8 +115,8 @@ export function matchLabels(
  * - Caches the result per country so the SVG is only parsed once.
  */
 export function getRegionMap(countryId: string): RegionMap | undefined {
-  const cached = parsedCache.get(countryId);
-  if (cached) return cached;
+  const cachedMap = parsedCache.get(countryId);
+  if (cachedMap) return cachedMap;
 
   const config = MAP_CONFIGS[countryId];
   if (!config) return undefined; // no map configured for this country
@@ -124,6 +125,8 @@ export function getRegionMap(countryId: string): RegionMap | undefined {
     viewBox: config.viewBox,
     regions: matchLabels(parseSvgRegions(config.svg), config.labels),
   };
+
   parsedCache.set(countryId, map);
+
   return map;
 }

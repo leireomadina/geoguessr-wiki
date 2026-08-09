@@ -12,18 +12,21 @@ interface RegionMapProps {
 }
 
 // Splits a path's `d` data into its sub-paths (each new sub-path starts with an M command).
-const splitSubPaths = (d: string): string[] => {
-  const parts: string[] = [];
-  let current = "";
-  for (const ch of d) {
-    if ((ch === "M" || ch === "m") && current) {
-      parts.push(current);
-      current = "";
+const splitSubPaths = (pathData: string): string[] => {
+  const subPaths: string[] = [];
+  let currentSubPath = "";
+
+  for (const char of pathData) {
+    if ((char === "M" || char === "m") && currentSubPath) {
+      subPaths.push(currentSubPath);
+      currentSubPath = "";
     }
-    current += ch;
+    currentSubPath += char;
   }
-  if (current) parts.push(current);
-  return parts;
+
+  if (currentSubPath) subPaths.push(currentSubPath);
+
+  return subPaths;
 };
 
 interface Box {
@@ -55,9 +58,14 @@ const RegionMap: React.FC<RegionMapProps> = ({
   // the label off the actual region. The same boxes also drive the automatic
   // fill colors, which are assigned once so adjacent shapes never match.
   useLayoutEffect(() => {
-    const svg = svgRef.current;
-    if (!svg || !map) return;
+    const svgElement = svgRef.current;
+    if (!svgElement || !map) return;
 
+    // Dev-only consistency check: a region renders on the map only when its
+    // name exactly matches an SVG <path title> (the regionMaps config is keyed
+    // by name). A typo, accent, or whitespace difference would otherwise drop
+    // the region silently, so warn loudly in dev (tree-shaken from production
+    // builds) instead of letting mismatches go unnoticed.
     if (import.meta.env.DEV) {
       const shapeNames = new Set(Object.keys(map.regions));
       const regionNames = new Set(regions.map((region) => region.name));
@@ -77,66 +85,87 @@ const RegionMap: React.FC<RegionMapProps> = ({
       }
     }
 
-    const vbWidth = Number(map.viewBox.split(" ")[2]);
+    const viewBoxWidth = Number(map.viewBox.split(" ")[2]);
 
-    const mainBox = (pathEl: SVGPathElement): Box | undefined => {
-      const d = pathEl.getAttribute("d") ?? "";
-      let best: Box | undefined;
-      for (const sub of splitSubPaths(d)) {
-        const el = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        el.setAttribute("d", sub);
-        svg.appendChild(el);
-        const b = el.getBBox();
-        el.remove();
-        const box = {
-          x: b.x,
-          y: b.y,
-          width: b.width,
-          height: b.height,
-          area: b.width * b.height,
+    const mainSubPathBox = (shapeElement: SVGPathElement): Box | undefined => {
+      const pathData = shapeElement.getAttribute("d") ?? "";
+      let largestBox: Box | undefined;
+
+      for (const subPath of splitSubPaths(pathData)) {
+        const measureElement = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
+        measureElement.setAttribute("d", subPath);
+        svgElement.appendChild(measureElement);
+
+        const bbox = measureElement.getBBox();
+        measureElement.remove();
+
+        const subPathBox = {
+          x: bbox.x,
+          y: bbox.y,
+          width: bbox.width,
+          height: bbox.height,
+          area: bbox.width * bbox.height,
         };
-        if (!best || box.area > best.area) best = box;
+
+        if (!largestBox || subPathBox.area > largestBox.area) {
+          largestBox = subPathBox;
+        }
       }
-      return best;
+
+      return largestBox;
     };
 
-    const groups = Array.from(
-      svg.querySelectorAll<SVGGElement>(".region-map-group")
+    const regionGroups = Array.from(
+      svgElement.querySelectorAll<SVGGElement>(".region-map-group")
     );
 
-    const boxes = groups.map((group) => {
-      const path = group.querySelector<SVGPathElement>(".region-shape");
-      return path ? mainBox(path) : undefined;
+    const regionBoxes = regionGroups.map((group) => {
+      const shapeElement = group.querySelector<SVGPathElement>(".region-shape");
+      return shapeElement ? mainSubPathBox(shapeElement) : undefined;
     });
-    const colors = assignRegionColors(boxes);
 
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      const path = group.querySelector<SVGPathElement>(".region-shape");
-      const text = group.querySelector<SVGTextElement>(".region-label");
-      if (!path || !text) continue;
-      const box = boxes[i];
-      if (!box) continue;
+    const fillColors = assignRegionColors(regionBoxes);
 
-      path.style.fill = colors[i] ?? "";
+    for (
+      let regionIndex = 0;
+      regionIndex < regionGroups.length;
+      regionIndex++
+    ) {
+      const group = regionGroups[regionIndex];
+      const shapeElement = group.querySelector<SVGPathElement>(".region-shape");
+      const labelElement = group.querySelector<SVGTextElement>(".region-label");
+      if (!shapeElement || !labelElement) continue;
 
-      const textBox = text.getBBox();
-      const cx = box.x + box.width / 2;
-      const cy = box.y + box.height / 2;
-      const fits = textBox.width <= box.width * LABEL_FIT_RATIO;
-      text.setAttribute("y", String(cy));
-      text.setAttribute("dominant-baseline", "central");
-      if (fits) {
-        text.setAttribute("x", String(cx));
-        text.setAttribute("text-anchor", "middle");
+      const regionBox = regionBoxes[regionIndex];
+      if (!regionBox) continue;
+
+      shapeElement.style.fill = fillColors[regionIndex] ?? "";
+
+      const labelBox = labelElement.getBBox();
+      const centerX = regionBox.x + regionBox.width / 2;
+      const centerY = regionBox.y + regionBox.height / 2;
+      const labelFits = labelBox.width <= regionBox.width * LABEL_FIT_RATIO;
+      labelElement.setAttribute("y", String(centerY));
+      labelElement.setAttribute("dominant-baseline", "central");
+
+      if (labelFits) {
+        labelElement.setAttribute("x", String(centerX));
+        labelElement.setAttribute("text-anchor", "middle");
       } else if (
-        box.x + box.width + LABEL_OFFSET_PX + textBox.width <= vbWidth
+        regionBox.x + regionBox.width + LABEL_OFFSET_PX + labelBox.width <=
+        viewBoxWidth
       ) {
-        text.setAttribute("x", String(box.x + box.width + LABEL_OFFSET_PX));
-        text.setAttribute("text-anchor", "start");
+        labelElement.setAttribute(
+          "x",
+          String(regionBox.x + regionBox.width + LABEL_OFFSET_PX),
+        );
+        labelElement.setAttribute("text-anchor", "start");
       } else {
-        text.setAttribute("x", String(box.x - LABEL_OFFSET_PX));
-        text.setAttribute("text-anchor", "end");
+        labelElement.setAttribute("x", String(regionBox.x - LABEL_OFFSET_PX));
+        labelElement.setAttribute("text-anchor", "end");
       }
     }
   }, [map, regions]);
@@ -152,10 +181,12 @@ const RegionMap: React.FC<RegionMapProps> = ({
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
       >
-        {regions.map((region, i) => {
+        {regions.map((region, regionIndex) => {
           const shape = map.regions[region.name];
           if (!shape) return null;
-          const selected = i === selectedIndex;
+
+          const selected = regionIndex === selectedIndex;
+
           return (
             <g
               key={region.name}
@@ -163,11 +194,11 @@ const RegionMap: React.FC<RegionMapProps> = ({
               tabIndex={0}
               aria-label={`Select ${region.name}`}
               aria-pressed={selected}
-              onClick={() => onSelect(i)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onSelect(i);
+              onClick={() => onSelect(regionIndex)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  onSelect(regionIndex);
                 }
               }}
               className={`region-map-group${selected ? " selected" : ""}`}
