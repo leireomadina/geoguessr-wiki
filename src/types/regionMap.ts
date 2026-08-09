@@ -26,10 +26,12 @@ export interface RegionMap {
  * The raw config for a country's map (used to build a RegionMap):
  * - `viewBox`: same `viewBox` attribute that ends up on the parsed map.
  * - `svg`: the source SVG file's contents, imported with `?raw`.
- * - `labels`: region name -> label settings (everything of a RegionShape except the path data `d`).
+ * - `labels`: region name -> label settings (everything of a RegionShape except
+ *   the path data `d`). Optional: when a region has no entry, its label falls
+ *   back to the region name itself.
  */
 export interface RegionMapConfig {
   viewBox: string;
   svg: string;
-  labels: Record<string, Omit<RegionShape, "d">>;
+  labels?: Record<string, Omit<RegionShape, "d">>;
 }

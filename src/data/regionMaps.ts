@@ -1,5 +1,6 @@
 import australiaLow from "@/assets/maps/australiaLow.svg?raw";
 import czechiaLow from "@/assets/maps/czechiaLow.svg?raw";
+import polandLow from "@/assets/maps/polandLow.svg?raw";
 import type { RegionMap, RegionMapConfig, RegionShape } from "@/types/regionMap";
 
 const MAP_CONFIGS: Record<string, RegionMapConfig> = {
@@ -37,6 +38,28 @@ const MAP_CONFIGS: Record<string, RegionMapConfig> = {
       "Moravskoslezský kraj": { label: "Morav." },
     },
   },
+  PL: {
+    viewBox: "-15 -29 627 606",
+    svg: polandLow,
+    labels: {
+      "Dolnośląskie": { label: "Dolnośl." },
+      "Kujawsko-Pomorskie": { label: "Kuj.-Pomor." },
+      "Lubelskie": { label: "Lubel." },
+      "Lubuskie": { label: "Lubusk." },
+      "Łódzkie": { label: "Łódź" },
+      "Małopolskie": { label: "Małopol." },
+      "Mazowieckie": { label: "Mazow." },
+      "Opolskie": { label: "Opol." },
+      "Podkarpackie": { label: "Podkarp." },
+      "Podlaskie": { label: "Podlas." },
+      "Pomorskie": { label: "Pomor." },
+      "Śląskie": { label: "Śląsk" },
+      "Świętokrzyskie": { label: "Świętok." },
+      "Warmińsko-Mazurskie": { label: "Warm.-Mazur." },
+      "Wielkopolskie": { label: "Wielkopol." },
+      "Zachodniopomorskie": { label: "Zach.-Pomor." },
+    },
+  },
 };
 
 // True when a country has a map configured. Single source of truth so callers
@@ -65,18 +88,19 @@ export function parseSvgRegions(svg: string): Record<string, string> {
   return regions;
 }
 
-// Merges each shape's `d` with its configured label, keeping only names
-// that have both a shape and a label.
+// Merges each shape's `d` with its configured label (falling back to the region
+// name), keeping only names that have both a shape and a label.
 export function matchLabels(
   shapes: Record<string, string>,
-  labels: Record<string, Omit<RegionShape, "d">>,
+  labels: Record<string, Omit<RegionShape, "d">> = {},
 ): Record<string, RegionShape> {
   const regions: Record<string, RegionShape> = {};
 
   for (const [name, d] of Object.entries(shapes)) {
-    const label = labels[name];
-    if (label) {
-      regions[name] = { d, ...label };
+    if (labels[name]) {
+      regions[name] = { d, ...labels[name] };
+    } else {
+      regions[name] = { d, label: name };
     }
   }
 
