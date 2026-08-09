@@ -39,6 +39,12 @@ const MAP_CONFIGS: Record<string, RegionMapConfig> = {
   },
 };
 
+// True when a country has a map configured. Single source of truth so callers
+// don't hardcode country IDs.
+export function hasRegionMap(countryId: string): boolean {
+  return countryId in MAP_CONFIGS;
+}
+
 // Caches parsed maps so the SVG is only parsed once per country.
 const parsedCache = new Map<string, RegionMap>();
 

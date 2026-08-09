@@ -5,6 +5,7 @@ import { getFlagEmoji } from "@/utils/countryUtils";
 import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
 import RegionMap from "@/components/RegionMap";
+import { hasRegionMap } from "@/data/regionMaps";
 import type { Difficulty } from "@/types/country";
 import NotFound from "./NotFound";
 
@@ -27,7 +28,7 @@ const CountryDetail: React.FC = () => {
       )
     : [];
 
-  const hasRegionMap = country?.id === "AU" || country?.id === "CZ";
+  const hasMap = country ? hasRegionMap(country.id) : false;
 
   if (!country) {
     return <NotFound />;
@@ -112,8 +113,8 @@ const CountryDetail: React.FC = () => {
                   <RegionCard
                     key={i}
                     region={region}
-                    selected={hasRegionMap && i === selectedRegion}
-                    onSelect={hasRegionMap ? () => setSelectedRegion(i) : undefined}
+                    selected={hasMap && i === selectedRegion}
+                    onSelect={hasMap ? () => setSelectedRegion(i) : undefined}
                   />
                 ))
               ) : (
@@ -129,7 +130,7 @@ const CountryDetail: React.FC = () => {
               )}
             </div>
 
-            {hasRegionMap && country.regions.length > 0 && (
+            {hasMap && country.regions.length > 0 && (
               <div className="regions-explore">
                 <div className="region-map-frame">
                   <RegionMap
