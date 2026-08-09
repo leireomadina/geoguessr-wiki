@@ -1,0 +1,64 @@
+.region-map-frame {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.region-map {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.region-shape {
+  stroke: var(--line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, stroke-width 0.2s ease, stroke 0.2s ease;
+}
+
+.region-map-group:hover .region-shape {
+  opacity: 0.8;
+}
+
+.region-map-group:focus,
+.region-map-group:focus-visible {
+  outline: none;
+}
+
+.region-map-group:focus .region-shape,
+.region-map-group:focus-visible .region-shape {
+  stroke: #ffffff;
+  stroke-width: 3.5;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
+}
+
+.region-shape.selected {
+  stroke: #ffffff;
+  stroke-width: 3.5;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
+}
+
+.region-label {
+  fill: #ffffff;
+  font-weight: 900;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  user-select: none;
+  paint-order: stroke;
+  stroke: var(--shadow-hard);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .region-label {
+    font-size: 11px;
+  }
+}

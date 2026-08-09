@@ -14,6 +14,7 @@ const country: Country = {
     { label: "meta", value: "Concrete roads", tag: "easy" },
     { label: "meta", value: "Long thin lamp posts", tag: "easy" },
     { label: "meta", value: "Green big signs with thai script", tag: "easy" },
+    { label: "meta", value: "Left-hand driving", tag: "easy" },
     { label: "meta", value: "Square poles with holes", tag: "medium" },
     { label: "meta", value: "Black & white striped bollards", tag: "medium" },
     { label: "meta", value: "Yellow middle lines", tag: "medium" },

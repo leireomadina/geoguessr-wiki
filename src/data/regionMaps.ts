@@ -1,0 +1,132 @@
+import australiaLow from "@/assets/maps/australiaLow.svg?raw";
+import czechiaLow from "@/assets/maps/czechiaLow.svg?raw";
+import polandLow from "@/assets/maps/polandLow.svg?raw";
+import type { RegionMap, RegionMapConfig, RegionShape } from "@/types/regionMap";
+
+const MAP_CONFIGS: Record<string, RegionMapConfig> = {
+  AU: {
+    viewBox: "0 0 500 600",
+    svg: australiaLow,
+    labels: {
+      "Northern Territory": { label: "NT" },
+      "Western Australia": { label: "WA" },
+      "Australian Capital Territory": { label: "ACT" },
+      "New South Wales": { label: "NSW" },
+      "South Australia": { label: "SA" },
+      "Victoria": { label: "Victoria" },
+      "Queensland": { label: "Queensland" },
+      "Tasmania": { label: "Tasmania" },
+    },
+  },
+  CZ: {
+    viewBox: "0 440 612 355",
+    svg: czechiaLow,
+    labels: {
+      "Praha": { label: "Prague" },
+      "Středočeský kraj": { label: "Středoč." },
+      "Jihočeský kraj": { label: "Jihoč." },
+      "Plzeňský kraj": { label: "Plzeň" },
+      "Karlovarský kraj": { label: "Karl. Vary" },
+      "Ústecký kraj": { label: "Ústí n.L." },
+      "Liberecký kraj": { label: "Liberec" },
+      "Královéhradecký kraj": { label: "Hr. Králové" },
+      "Pardubický kraj": { label: "Pardubice" },
+      "Vysočina": { label: "Vysočina" },
+      "Jihomoravský kraj": { label: "Jihomor." },
+      "Olomoucký kraj": { label: "Olom." },
+      "Zlínský kraj": { label: "Zlín" },
+      "Moravskoslezský kraj": { label: "Morav." },
+    },
+  },
+  PL: {
+    viewBox: "-15 -29 627 606",
+    svg: polandLow,
+    labels: {
+      "Dolnośląskie": { label: "Dolnośl." },
+      "Kujawsko-Pomorskie": { label: "Kuj.-Pomor." },
+      "Lubelskie": { label: "Lubel." },
+      "Lubuskie": { label: "Lubusk." },
+      "Łódzkie": { label: "Łódź" },
+      "Małopolskie": { label: "Małopol." },
+      "Mazowieckie": { label: "Mazow." },
+      "Opolskie": { label: "Opol." },
+      "Podkarpackie": { label: "Podkarp." },
+      "Podlaskie": { label: "Podlas." },
+      "Pomorskie": { label: "Pomor." },
+      "Śląskie": { label: "Śląsk" },
+      "Świętokrzyskie": { label: "Świętok." },
+      "Warmińsko-Mazurskie": { label: "Warm.-Mazur." },
+      "Wielkopolskie": { label: "Wielkopol." },
+      "Zachodniopomorskie": { label: "Zach.-Pomor." },
+    },
+  },
+};
+
+// True when a country has a map configured. Single source of truth so callers
+// don't hardcode country IDs.
+export function hasRegionMap(countryId: string): boolean {
+  return countryId in MAP_CONFIGS;
+}
+
+// Caches parsed maps so the SVG is only parsed once per country.
+const parsedCache = new Map<string, RegionMap>();
+
+// Extracts each `<path>`'s `title` (region name) and `d` (shape data) from a
+// raw SVG string. Knows nothing about labels or configs.
+export function parseSvgRegions(svg: string): Record<string, string> {
+  const svgDocument = new DOMParser().parseFromString(svg, "image/svg+xml");
+  const regions: Record<string, string> = {};
+
+  for (const pathElement of Array.from(svgDocument.querySelectorAll("path"))) {
+    const name = pathElement.getAttribute("title");
+    const pathData = pathElement.getAttribute("d");
+
+    if (name && pathData) {
+      regions[name] = pathData;
+    }
+  }
+
+  return regions;
+}
+
+// Merges each shape's `d` with its configured label (falling back to the region
+// name), keeping only names that have both a shape and a label.
+export function matchLabels(
+  shapes: Record<string, string>,
+  labels: Record<string, Omit<RegionShape, "d">> = {},
+): Record<string, RegionShape> {
+  const regions: Record<string, RegionShape> = {};
+
+  for (const [name, pathData] of Object.entries(shapes)) {
+    if (labels[name]) {
+      regions[name] = { d: pathData, ...labels[name] };
+    } else {
+      regions[name] = { d: pathData, label: name };
+    }
+  }
+
+  return regions;
+}
+
+/**
+ * Parses a country's raw SVG text into a render-ready RegionMap:
+ * - Reads each `<path>` and matches it by its `title` (region name) to the config's labels.
+ * - Keeps regions that have a name, shape data (`d`), and a label.
+ * - Caches the result per country so the SVG is only parsed once.
+ */
+export function getRegionMap(countryId: string): RegionMap | undefined {
+  const cachedMap = parsedCache.get(countryId);
+  if (cachedMap) return cachedMap;
+
+  const config = MAP_CONFIGS[countryId];
+  if (!config) return undefined; // no map configured for this country
+
+  const map = {
+    viewBox: config.viewBox,
+    regions: matchLabels(parseSvgRegions(config.svg), config.labels),
+  };
+
+  parsedCache.set(countryId, map);
+
+  return map;
+}
