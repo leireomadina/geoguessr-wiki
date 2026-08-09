@@ -34,6 +34,11 @@ interface Box {
   area: number;
 }
 
+// Label layout tuning: how much of a shape's width a label may occupy before
+// it is placed beside the shape instead, and the gap between shape and label.
+const LABEL_FIT_RATIO = 0.85;
+const LABEL_OFFSET_PX = 8;
+
 const RegionMap: React.FC<RegionMapProps> = ({
   countryId,
   regions,
@@ -118,17 +123,19 @@ const RegionMap: React.FC<RegionMapProps> = ({
       const textBox = text.getBBox();
       const cx = box.x + box.width / 2;
       const cy = box.y + box.height / 2;
-      const fits = textBox.width <= box.width * 0.85;
+      const fits = textBox.width <= box.width * LABEL_FIT_RATIO;
       text.setAttribute("y", String(cy));
       text.setAttribute("dominant-baseline", "central");
       if (fits) {
         text.setAttribute("x", String(cx));
         text.setAttribute("text-anchor", "middle");
-      } else if (box.x + box.width + 8 + textBox.width <= vbWidth) {
-        text.setAttribute("x", String(box.x + box.width + 8));
+      } else if (
+        box.x + box.width + LABEL_OFFSET_PX + textBox.width <= vbWidth
+      ) {
+        text.setAttribute("x", String(box.x + box.width + LABEL_OFFSET_PX));
         text.setAttribute("text-anchor", "start");
       } else {
-        text.setAttribute("x", String(box.x - 8));
+        text.setAttribute("x", String(box.x - LABEL_OFFSET_PX));
         text.setAttribute("text-anchor", "end");
       }
     }
