@@ -52,6 +52,26 @@ const RegionMap: React.FC<RegionMapProps> = ({
   useLayoutEffect(() => {
     const svg = svgRef.current;
     if (!svg || !map) return;
+
+    if (import.meta.env.DEV) {
+      const shapeNames = new Set(Object.keys(map.regions));
+      const regionNames = new Set(regions.map((region) => region.name));
+      for (const region of regions) {
+        if (!shapeNames.has(region.name)) {
+          console.warn(
+            `[RegionMap] No map shape for region "${region.name}" - check that the SVG <path title> matches Region.name in the country data.`,
+          );
+        }
+      }
+      for (const name of shapeNames) {
+        if (!regionNames.has(name)) {
+          console.warn(
+            `[RegionMap] Map shape "${name}" has no matching region in the country data.`,
+          );
+        }
+      }
+    }
+
     const vbWidth = Number(map.viewBox.split(" ")[2]);
 
     const mainBox = (pathEl: SVGPathElement): Box | undefined => {
