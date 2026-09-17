@@ -276,7 +276,7 @@
 }
 
 .regions-grid-wrapper.open {
-  max-height: 2000px;
+  max-height: 3800px;
   opacity: 1;
   padding-bottom: 8px;
 }
@@ -308,6 +308,65 @@
   gap: 1rem;
 }
 
+.regions-explore {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 2fr;
+  gap: 1.5rem;
+  align-items: stretch;
+  margin-top: 1.5rem;
+}
+
+.region-detail-panel {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.region-detail-index {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+.region-detail-icon {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.region-detail-name {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.region-detail-cities {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: var(--accent-deep);
+}
+
+.region-detail-description {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.region-detail-coming-soon {
+  margin-top: 1.5rem;
+}
+
 .empty-resources {
   font-size: 1rem;
   font-weight: 700;
@@ -329,5 +388,9 @@
 
   .country-flag-large {
     font-size: 3.5rem;
+  }
+
+  .regions-explore {
+    grid-template-columns: 1fr;
   }
 }
