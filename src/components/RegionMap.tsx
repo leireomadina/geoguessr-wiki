@@ -48,7 +48,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
   selectedIndex,
   onSelect,
 }) => {
-  const map = getRegionMap(countryId);
+  const countryMap = getRegionMap(countryId);
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Positions each label automatically: centered on the shape when it fits,
@@ -59,7 +59,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
   // fill colors, which are assigned once so adjacent shapes never match.
   useLayoutEffect(() => {
     const svgElement = svgRef.current;
-    if (!svgElement || !map) return;
+    if (!svgElement || !countryMap) return;
 
     // Dev-only consistency check: a region renders on the map only when its
     // name exactly matches an SVG <path title> (the regionMaps config is keyed
@@ -67,7 +67,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
     // the region silently, so warn loudly in dev (tree-shaken from production
     // builds) instead of letting mismatches go unnoticed.
     if (import.meta.env.DEV) {
-      const shapeNames = new Set(Object.keys(map.regions));
+      const shapeNames = new Set(Object.keys(countryMap.regions));
       const regionNames = new Set(regions.map((region) => region.name));
       for (const region of regions) {
         if (!shapeNames.has(region.name)) {
@@ -85,7 +85,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
       }
     }
 
-    const viewBoxWidth = Number(map.viewBox.split(" ")[2]);
+    const viewBoxWidth = Number(countryMap.viewBox.split(" ")[2]);
 
     const mainSubPathBox = (shapeElement: SVGPathElement): Box | undefined => {
       const pathData = shapeElement.getAttribute("d") ?? "";
@@ -119,7 +119,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
     };
 
     const regionGroups = Array.from(
-      svgElement.querySelectorAll<SVGGElement>(".region-map-group")
+      svgElement.querySelectorAll<SVGGElement>(".region-map-group"),
     );
 
     const regionBoxes = regionGroups.map((group) => {
@@ -168,21 +168,21 @@ const RegionMap: React.FC<RegionMapProps> = ({
         labelElement.setAttribute("text-anchor", "end");
       }
     }
-  }, [map, regions]);
+  }, [countryMap, regions]);
 
-  if (!map) return null;
+  if (!countryMap) return null;
 
   return (
     <>
       <svg
         ref={svgRef}
         className="region-map"
-        viewBox={map.viewBox}
+        viewBox={countryMap.viewBox}
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
       >
         {regions.map((region, regionIndex) => {
-          const shape = map.regions[region.name];
+          const shape = countryMap.regions[region.name];
           if (!shape) return null;
 
           const selected = regionIndex === selectedIndex;
