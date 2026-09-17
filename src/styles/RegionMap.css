@@ -29,13 +29,7 @@
 }
 
 .region-map-group:focus .region-shape,
-.region-map-group:focus-visible .region-shape {
-  stroke: #ffffff;
-  stroke-width: 3.5;
-  opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
-}
-
+.region-map-group:focus-visible .region-shape,
 .region-shape.selected {
   stroke: #ffffff;
   stroke-width: 3.5;
