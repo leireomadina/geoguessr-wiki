@@ -52,16 +52,17 @@ export function assignRegionColors(
     const box = boxes[i];
     if (!box) continue;
 
-    const used = new Set<string>();
+    const takenColors = new Set<string>();
     for (let j = 0; j < i; j++) {
       const other = boxes[j];
-      if (other && boxesOverlap(box, other)) used.add(assigned[j] as string);
+      if (other && boxesOverlap(box, other))
+        takenColors.add(assigned[j] as string);
     }
 
     let color = CANDIDATES[i % CANDIDATES.length];
     for (let offset = 0; offset < CANDIDATES.length; offset++) {
       const candidate = CANDIDATES[(i + offset) % CANDIDATES.length];
-      if (!used.has(candidate)) {
+      if (!takenColors.has(candidate)) {
         color = candidate;
         break;
       }
