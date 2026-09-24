@@ -19,6 +19,9 @@ import colombia from "./colombia";
 import ecuador from "./ecuador";
 import peru from "./peru";
 import uruguay from "./uruguay";
+import russia from "./russia";
+import latvia from "./latvia";
+import romania from "./romania";
 
 export const countries: Country[] = [
   japan,
@@ -41,4 +44,7 @@ export const countries: Country[] = [
   ecuador,
   peru,
   uruguay,
+  russia,
+  latvia,
+  romania,
 ];

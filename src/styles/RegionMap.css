@@ -51,8 +51,24 @@
   stroke-linejoin: round;
 }
 
+/* Russia is 3.3:1 wide and has 83 dense labels in the west — make it fill the frame */
+.region-map--ru {
+  width: 100%;
+  height: auto;
+  /* keep labels readable on dense western cluster */
+}
+
+.region-map--ru .region-label {
+  font-size: 4.5px;
+  letter-spacing: 0.01em;
+  stroke-width: 1.2px;
+}
+
 @media (max-width: 600px) {
   .region-label {
     font-size: 11px;
+  }
+  .region-map--ru .region-label {
+    font-size: 3.2px;
   }
 }

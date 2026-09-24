@@ -37,10 +37,9 @@ interface Box {
   area: number;
 }
 
-// Label layout tuning: how much of a shape's width a label may occupy before
-// it is placed beside the shape instead, and the gap between shape and label.
+// Label layout tuning: how much of a shape's width a label may occupy.
+// If it doesn't fit, the label is hidden — small western oblasts stay clean.
 const LABEL_FIT_RATIO = 0.85;
-const LABEL_OFFSET_PX = 8;
 
 const RegionMap: React.FC<RegionMapProps> = ({
   countryId,
@@ -85,8 +84,6 @@ const RegionMap: React.FC<RegionMapProps> = ({
       }
     }
 
-    const viewBoxWidth = Number(countryMap.viewBox.split(" ")[2]);
-
     const mainSubPathBox = (shapeElement: SVGPathElement): Box | undefined => {
       const pathData = shapeElement.getAttribute("d") ?? "";
       let largestBox: Box | undefined;
@@ -128,6 +125,9 @@ const RegionMap: React.FC<RegionMapProps> = ({
     });
 
     const fillColors = assignRegionColors(regionBoxes);
+    const [, , vbW, vbH] = countryMap.viewBox.split(" ").map(Number);
+    const viewBoxArea = vbW * vbH;
+    const isRussia = countryId === "RU";
 
     for (
       let regionIndex = 0;
@@ -148,25 +148,24 @@ const RegionMap: React.FC<RegionMapProps> = ({
       const centerX = regionBox.x + regionBox.width / 2;
       const centerY = regionBox.y + regionBox.height / 2;
       const labelFits = labelBox.width <= regionBox.width * LABEL_FIT_RATIO;
+      const isTiny = isRussia
+        ? regionBox.area < viewBoxArea * 0.004 ||
+          regionBox.width < vbW * 0.04 ||
+          regionBox.height < vbH * 0.07
+        : regionBox.area < viewBoxArea * 0.0012 ||
+          regionBox.width < vbW * 0.025 ||
+          regionBox.height < vbH * 0.045;
+
+      if (!labelFits || isTiny) {
+        labelElement.style.display = "none";
+        continue;
+      }
+
+      labelElement.style.display = "";
       labelElement.setAttribute("y", String(centerY));
       labelElement.setAttribute("dominant-baseline", "central");
-
-      if (labelFits) {
-        labelElement.setAttribute("x", String(centerX));
-        labelElement.setAttribute("text-anchor", "middle");
-      } else if (
-        regionBox.x + regionBox.width + LABEL_OFFSET_PX + labelBox.width <=
-        viewBoxWidth
-      ) {
-        labelElement.setAttribute(
-          "x",
-          String(regionBox.x + regionBox.width + LABEL_OFFSET_PX),
-        );
-        labelElement.setAttribute("text-anchor", "start");
-      } else {
-        labelElement.setAttribute("x", String(regionBox.x - LABEL_OFFSET_PX));
-        labelElement.setAttribute("text-anchor", "end");
-      }
+      labelElement.setAttribute("x", String(centerX));
+      labelElement.setAttribute("text-anchor", "middle");
     }
   }, [countryMap, regions]);
 
@@ -176,7 +175,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
     <>
       <svg
         ref={svgRef}
-        className="region-map"
+        className={`region-map region-map--${countryId.toLowerCase()}`}
         viewBox={countryMap.viewBox}
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}

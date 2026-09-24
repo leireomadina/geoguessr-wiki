@@ -276,7 +276,7 @@
 }
 
 .regions-grid-wrapper.open {
-  max-height: 3800px;
+  max-height: 8000px;
   opacity: 1;
   padding-bottom: 8px;
 }
@@ -302,6 +302,25 @@
   transform: rotate(180deg);
 }
 
+/* Nested Regions list — visually subordinate to the outer Regions section */
+.regions-list {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.regions-list .regions-toggle {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin: 0 0 0.85rem;
+}
+
+.regions-list .regions-arrow {
+  font-size: 0.8rem;
+}
+
 .regions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -313,7 +332,44 @@
   grid-template-columns: minmax(260px, 1fr) 2fr;
   gap: 1.5rem;
   align-items: stretch;
-  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Russia — 70% map / 30% detail */
+.regions-explore--ru {
+  grid-template-columns: 7fr 3fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  overflow: visible;
+}
+
+.regions-explore--ru .region-map-frame {
+  display: block;
+  padding: 0;
+  overflow: visible;
+  align-self: start;
+  height: auto;
+  min-height: 0;
+}
+
+.regions-explore--ru .region-map--ru {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.regions-grid-wrapper.open {
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .regions-explore--ru {
+    grid-template-columns: 1fr;
+  }
 }
 
 .region-detail-panel {
