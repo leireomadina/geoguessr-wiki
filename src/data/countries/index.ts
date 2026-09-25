@@ -17,6 +17,23 @@ import colombia from "./colombia";
 import ecuador from "./ecuador";
 import peru from "./peru";
 import uruguay from "./uruguay";
+import philippines from "./philippines";
+import germany from "./germany";
+import portugal from "./portugal";
+import hungary from "./hungary";
+import croatia from "./croatia";
+import serbia from "./serbia";
+import bulgaria from "./bulgaria";
+import romania from "./romania";
+import ireland from "./ireland";
+import unitedKingdom from "./united-kingdom";
+import lithuania from "./lithuania";
+import latvia from "./latvia";
+import estonia from "./estonia";
+import finland from "./finland";
+import sweden from "./sweden";
+import norway from "./norway";
+import iceland from "./iceland";
 
 export const countries: Country[] = [
   japan,
@@ -37,4 +54,21 @@ export const countries: Country[] = [
   ecuador,
   peru,
   uruguay,
+  philippines,
+  germany,
+  portugal,
+  hungary,
+  croatia,
+  serbia,
+  bulgaria,
+  romania,
+  ireland,
+  unitedKingdom,
+  lithuania,
+  latvia,
+  estonia,
+  finland,
+  sweden,
+  norway,
+  iceland,
 ];
