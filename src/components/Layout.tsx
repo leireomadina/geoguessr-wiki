@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import "@/styles/Layout.css";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Layout: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const Layout: React.FC = () => {
             <Link to="/" className="nav-link">
               Home
             </Link>
+            <ThemeToggle />
           </div>
         </nav>
       </header>

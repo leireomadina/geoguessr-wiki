@@ -8,6 +8,7 @@ import {
 import { unslugContinent } from "@/utils/continentSlug";
 import "@/styles/ContinentDetail.css";
 import CountryCard from "@/components/CountryCard";
+import NotFound from "./NotFound";
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
@@ -16,6 +17,12 @@ const ContinentDetail: React.FC = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
 
   const continent = unslugContinent(continentName ?? "");
+  const validContinents = Array.from(
+    new Set(countries.map((country) => country.continent)),
+  ) as string[];
+  if (!validContinents.includes(continent)) {
+    return <NotFound />;
+  }
   const countriesInContinent = sortCountriesByName(
     countries.filter((country) => country.continent === continent),
   );

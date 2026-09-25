@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <script>
+      ;(function () {
+        const base = '/geoguessr-wiki'
+        const path = location.pathname.slice(base.length) || '/'
+        sessionStorage.setItem('gh-pages-redirect', path + location.search)
+        location.replace(base + '/')
+      })()
+    </script>
+  </head>
+  <body></body>
+</html>
