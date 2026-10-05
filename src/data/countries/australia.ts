@@ -12,6 +12,15 @@ const country: Country = {
       url: "https://www.plonkit.net/australia",
     },
   ],
+  meta: [
+    { label: "meta", value: "Eucalyptus trees", tag: "easy" },
+    { label: "meta", value: "White road lines", tag: "easy" },
+    { label: "meta", value: "Give way signs (white background)", tag: "easy" },
+    { label: "meta", value: "White rectangle speed signs", tag: "easy" },
+    { label: "meta", value: "White bollards with red reflector", tag: "medium" },
+    { label: "meta", value: "Left-hand driving", tag: "easy" },
+    { label: "meta", value: "Chevrons: white/black or black/yellow", tag: "medium" },
+  ],
   regions: [
     {
       name: "Queensland",

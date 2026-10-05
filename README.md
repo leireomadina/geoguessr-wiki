@@ -2,6 +2,22 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Interactive region maps (SVG source)
+
+The interactive maps in the regions section come from [amCharts Free SVG Maps](https://www.amcharts.com/svg-maps/). The raw paths are extracted from the **Low** detail SVG of a country (e.g. `australiaLow.svg`) and stored in [`src/data/regionMaps.ts`](src/data/regionMaps.ts), keyed by the region names used in each country's data file.
+
+- Source directory: `https://www.amcharts.com/lib/3/maps/svg/`
+- Example: `https://www.amcharts.com/lib/3/maps/svg/australiaLow.svg`
+- Each `<path>` carries an `id` (e.g. `AU-NSW`) and a `title` with the region name that must match the name in the country's `regions` data (e.g. `australia.ts`).
+- License: amCharts maps are free for non-commercial use under the [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+To add a map for a country:
+1. Download its `...Low.svg` from amCharts and copy it into `src/assets/maps/` (e.g. `australiaLow.svg`).
+2. Import it in `src/data/regionMaps.ts` and add a `MAP_CONFIGS` entry with the `viewBox` (amCharts SVGs have none, so supply it, e.g. `"0 0 500 600"`).
+3. Optional: add a `labels` entry per region to override the text shown on the map — the region name is used by default (use an acronym for long names, e.g. `"NSW"`).
+
+Label positions are computed automatically from each shape's main sub-path when the map renders, so no coordinates need to be picked by hand. If a shape is too small to fit its label, the label is placed beside the shape instead of on top of it. Fill colors are assigned automatically too: `assignRegionColors` (in `src/data/regionColors.ts`) picks from warm/cool/neutral palettes so that adjacent shapes never share a color — no per-region CSS classes to maintain.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
