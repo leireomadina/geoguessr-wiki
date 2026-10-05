@@ -3,14 +3,5 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ],
-  "compilerOptions": {
-      "jsx": "react-jsx",
-      "moduleResolution": "bundler",
-      "lib": ["dom", "dom.iterable", "esnext"],
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./src/*"]
-      }
-    }
+  ]
 }
