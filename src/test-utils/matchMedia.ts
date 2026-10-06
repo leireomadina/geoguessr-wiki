@@ -28,5 +28,6 @@ export function createMatchMediaMock(initialMatches = false, media = "") {
     emitChange: () => {
       for (const listener of listeners) listener();
     },
+    listenerCount: () => listeners.length,
   };
 }

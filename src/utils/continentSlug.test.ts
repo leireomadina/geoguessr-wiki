@@ -9,9 +9,8 @@ describe("slugContinent", () => {
   });
 
   it.each(CONTINENTS)("produces a valid slug for %s", (continent) => {
-    const slug = slugContinent(continent);
-    expect(slug).toBe(slug.toLowerCase());
-    expect(slug).not.toMatch(/\s/);
+    // Lowercase words joined by single hyphens, e.g. "north-america"
+    expect(slugContinent(continent)).toMatch(/^[a-z]+(-[a-z]+)*$/);
   });
 });
 

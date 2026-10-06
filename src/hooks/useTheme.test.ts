@@ -18,6 +18,25 @@ describe("useTheme", () => {
     expect(document.documentElement.dataset.theme).toBe("light");
   });
 
+  it("defaults to dark when the OS prefers dark", () => {
+    window.matchMedia = vi
+      .fn()
+      .mockReturnValue(createMatchMediaMock(true).mql);
+
+    const { result } = renderHook(() => useTheme());
+
+    expect(result.current.theme).toBe("dark");
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("ignores an invalid stored value and falls back to the OS preference", () => {
+    localStorage.setItem("theme", "blue");
+
+    const { result } = renderHook(() => useTheme());
+
+    expect(result.current.theme).toBe("light");
+  });
+
   it("honors a stored theme over the OS preference", () => {
     localStorage.setItem("theme", "dark");
 
@@ -56,5 +75,16 @@ describe("useTheme", () => {
     mock.setMatches(false);
     act(() => mock.emitChange());
     expect(result.current.theme).toBe("light");
+  });
+
+  it("stops listening to OS changes after unmounting", () => {
+    const mock = createMatchMediaMock(false);
+    window.matchMedia = vi.fn().mockReturnValue(mock.mql);
+
+    const { unmount } = renderHook(() => useTheme());
+    expect(mock.listenerCount()).toBe(1);
+
+    unmount();
+    expect(mock.listenerCount()).toBe(0);
   });
 });

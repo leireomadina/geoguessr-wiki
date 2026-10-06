@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 import { createMatchMediaMock } from "./matchMedia";
 
@@ -9,5 +10,8 @@ if (typeof window.matchMedia !== "function") {
 }
 
 afterEach(() => {
+  // Testing Library only auto-unmounts when Vitest globals are enabled (they
+  // aren't here), so unmount whatever render/renderHook mounted in the test.
+  cleanup();
   localStorage.clear();
 });
