@@ -28,7 +28,8 @@ jobs:
       - run: pnpm lint
       # Includes the type-check (tsc -b)
       - run: pnpm run build
-      - run: pnpm test
+      # Same tests as `pnpm test`, plus the coverage thresholds in vite.config.ts
+      - run: pnpm test:coverage
 
   e2e:
     runs-on: ubuntu-latest

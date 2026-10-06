@@ -36,6 +36,7 @@ Guidelines:
 - **Test with the real data, not mocks.** Derive expected values from the data (e.g. `countries.filter((c) => c.continent === "Europe")`) instead of hard-coding counts, so adding a country never breaks a test. When a state doesn't exist in the real data yet (e.g. a country with empty `regions`), use a small fixture with `vi.mock("@/data/countries")` in its own test file, like `src/pages/CountryDetail.fixtures.test.tsx`.
 - **Name the culprit in data assertions.** Pass a message such as `expect(value, "ES studyLinks[1] url")`, so a failure points straight to the file to fix.
 - **Query the way users do:** by role, label or visible text, not by CSS class.
+- **Coverage is a safety net, not a goal.** It measures app code only: the country files, test helpers, types and `main.tsx` are excluded. The thresholds catch untested additions. Don't chase 100%: the React Compiler adds hidden branches that show up as uncovered.
 - **Keep E2E small.** Anything that can be checked in jsdom belongs in layers 1–3, and Playwright covers only full journeys and real layout.
 
 Not covered on purpose (for now):
@@ -61,14 +62,14 @@ The project uses **pnpm only**. The version is pinned in `package.json` (`packag
 |---|---|
 | `pnpm test` | Unit, data and component tests, once |
 | `pnpm test:watch` | The same, re-running on file changes |
-| `pnpm test:coverage` | The same, with a coverage report |
+| `pnpm test:coverage` | The same, plus a coverage report in `coverage/` (open `coverage/index.html`). Fails if coverage drops below the thresholds in `vite.config.ts` |
 | `pnpm test:e2e` | Playwright end-to-end tests: builds the site and serves it with `vite preview` |
 | `pnpm test:e2e:install` | Downloads the Chromium build Playwright needs (once per machine, and after Playwright upgrades) |
 | `pnpm test:all` | Vitest, then Playwright |
 
 ### CI
 
-The **CI** workflow (`.github/workflows/ci.yml`) runs lint, the build (including the type-check) and `pnpm test` on every pull request and on every push to `main`. Its `checks` job is a required status check, so a pull request can't be merged into `main` while it's red. A second job, `e2e`, installs Chromium and runs `pnpm test:e2e`. When it fails, the Playwright report and traces are uploaded as an artifact.
+The **CI** workflow (`.github/workflows/ci.yml`) runs lint, the build (including the type-check) and `pnpm test:coverage` on every pull request and on every push to `main`. Its `checks` job is a required status check, so a pull request can't be merged into `main` while it's red. A second job, `e2e`, installs Chromium and runs `pnpm test:e2e`. When it fails, the Playwright report and traces are uploaded as an artifact.
 
 Currently, two official plugins are available:
 
