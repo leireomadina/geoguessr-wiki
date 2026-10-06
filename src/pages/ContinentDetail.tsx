@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { countries } from "@/data/countries";
+import { DIFFICULTIES } from "@/data/enums";
+import type { Difficulty } from "@/types/country";
 import {
   sortCountriesByName,
   formatCountryCount,
@@ -9,6 +11,13 @@ import { unslugContinent } from "@/utils/continentSlug";
 import "@/styles/ContinentDetail.css";
 import CountryCard from "@/components/CountryCard";
 import NotFound from "./NotFound";
+
+// "very_hard" -> "Very Hard"
+const formatDifficultyLabel = (difficulty: Difficulty): string =>
+  difficulty
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
 const ContinentDetail: React.FC = () => {
   const { continentName } = useParams<{ continentName: string }>();
@@ -63,10 +72,11 @@ const ContinentDetail: React.FC = () => {
             className="difficulty-filter"
           >
             <option value="">All Difficulties</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-            <option value="very_hard">Very Hard</option>
+            {DIFFICULTIES.map((difficulty) => (
+              <option key={difficulty} value={difficulty}>
+                {formatDifficultyLabel(difficulty)}
+              </option>
+            ))}
           </select>
         </div>
       </section>
