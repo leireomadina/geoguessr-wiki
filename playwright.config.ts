@@ -6,7 +6,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: [['list']],
+  // In CI, also write an HTML report (uploaded as an artifact when tests fail)
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   use: {
     baseURL: 'http://localhost:4173/geoguessr-wiki/',
     trace: 'on-first-retry'

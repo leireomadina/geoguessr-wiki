@@ -24,12 +24,12 @@ Label positions are computed automatically from each shape's main sub-path when 
 
 The site is a static, data-driven SPA: most of what can break is **content** (the country files in `src/data/countries/`) and the **interactive region map**, not complex app logic. Tests are therefore split into four layers, weighted towards fast checks that run on every change, with only a thin layer of real-browser tests on top.
 
-| Layer | Purpose | Tools | Status |
-|---|---|---|---|
-| 1. Unit | Pure logic: utils, SVG map parsing, region color assignment, the theme hook | Vitest | ✅ Done |
-| 2. Data integrity | Content can't silently break the site: valid ids, enums and URLs, and region names matching the SVG map shapes | Vitest | ✅ Done |
-| 3. Component / integration | Pages and components behave correctly through the real routes: search and filters, region selection, not-found pages, theme toggle | Vitest + Testing Library + user-event (jsdom) | ✅ Done |
-| 4. End-to-end | A few critical user journeys in a real browser against the built site, plus what jsdom can't do (SVG layout with `getBBox`) | Playwright (Chromium) | ⏳ Planned |
+| Layer | Purpose | Tools |
+|---|---|---|
+| 1. Unit | Pure logic: utils, SVG map parsing, region color assignment, the theme hook | Vitest |
+| 2. Data integrity | Content can't silently break the site: valid ids, enums and URLs, and region names matching the SVG map shapes | Vitest |
+| 3. Component / integration | Pages and components behave correctly through the real routes: search and filters, region selection, not-found pages, theme toggle | Vitest + Testing Library + user-event (jsdom) |
+| 4. End-to-end | A few critical user journeys in a real browser against the built site, plus what jsdom can't do (SVG layout with `getBBox`) | Playwright (Chromium) |
 
 Guidelines:
 
@@ -46,7 +46,8 @@ Not covered on purpose (for now):
 ### Where tests live
 
 - **Unit, data and component tests:** next to the code they test, as `*.test.ts` or `*.test.tsx` (e.g. `src/utils/countryUtils.test.ts`).
-- **End-to-end tests:** in `e2e/*.spec.ts`. Vitest ignores this folder.
+- **End-to-end tests:** in `e2e/*.spec.ts`. Vitest ignores this folder, and it has its own `tsconfig.e2e.json` (with DOM types, since `page.evaluate` callbacks run in the browser).
+  - Import `test` and `expect` from `e2e/fixtures.ts`, not from `@playwright/test`. Its shared `test` answers requests to other sites with an empty response, so tests don't need the network, and it fails any test whose page logs a console error or throws.
 - **Shared helpers:** in `src/test-utils/`.
   - `setup.ts` runs before every test file. It adds the jest-dom matchers, mocks `matchMedia` and SVG `getBBox` (which jsdom lacks), and unmounts rendered components and clears `localStorage` after each test.
   - `matchMedia.ts` provides a controllable `matchMedia` mock, used to simulate OS light/dark changes.
@@ -62,11 +63,12 @@ The project uses **pnpm only**. The version is pinned in `package.json` (`packag
 | `pnpm test:watch` | The same, re-running on file changes |
 | `pnpm test:coverage` | The same, with a coverage report |
 | `pnpm test:e2e` | Playwright end-to-end tests: builds the site and serves it with `vite preview` |
+| `pnpm test:e2e:install` | Downloads the Chromium build Playwright needs (once per machine, and after Playwright upgrades) |
 | `pnpm test:all` | Vitest, then Playwright |
 
 ### CI
 
-The **CI** workflow (`.github/workflows/ci.yml`) runs lint, the build (including the type-check) and `pnpm test` on every pull request and on every push to `main`. Its `checks` job is a required status check, so a pull request can't be merged into `main` while it's red.
+The **CI** workflow (`.github/workflows/ci.yml`) runs lint, the build (including the type-check) and `pnpm test` on every pull request and on every push to `main`. Its `checks` job is a required status check, so a pull request can't be merged into `main` while it's red. A second job, `e2e`, installs Chromium and runs `pnpm test:e2e`. When it fails, the Playwright report and traces are uploaded as an artifact.
 
 Currently, two official plugins are available:
 
