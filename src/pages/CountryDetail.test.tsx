@@ -92,19 +92,45 @@ describe("Country page", () => {
     );
   });
 
-  it("collapses and expands the regions with the Regions heading", async () => {
+  describe("Regions toggle", () => {
     const country = findCountry("with regions", (c) => !!c.regions?.length);
-    const { user } = renderRoute(`/country/${country.id}`);
-    const heading = screen.getByRole("heading", { level: 2, name: /Regions/ });
-    // Collapsing is CSS-only (the cards stay in the DOM), so the wrapper's
-    // "open" class is the observable state.
-    const wrapper = () => heading.nextElementSibling!;
+    const toggle = () => screen.getByRole("button", { name: "Regions" });
+    const panel = () => document.getElementById(toggle().getAttribute("aria-controls")!)!;
 
-    expect(wrapper()).toHaveClass("open");
-    await user.click(heading);
-    expect(wrapper()).not.toHaveClass("open");
-    await user.click(heading);
-    expect(wrapper()).toHaveClass("open");
+    it("is a button inside the Regions heading, controlling the regions panel", () => {
+      renderRoute(`/country/${country.id}`);
+
+      expect(screen.getByRole("heading", { level: 2, name: "Regions" })).toContainElement(toggle());
+      expect(panel()).toContainElement(
+        screen.getByRole("heading", { level: 3, name: country.regions![0].name }),
+      );
+    });
+
+    it("starts expanded, and collapses and expands on click", async () => {
+      const { user } = renderRoute(`/country/${country.id}`);
+
+      expect(toggle()).toHaveAttribute("aria-expanded", "true");
+      expect(panel()).not.toHaveAttribute("inert");
+
+      await user.click(toggle());
+      expect(toggle()).toHaveAttribute("aria-expanded", "false");
+      // Collapsed content stays in the DOM for the animation, but is inert:
+      // no keyboard focus, hidden from screen readers
+      expect(panel()).toHaveAttribute("inert");
+
+      await user.click(toggle());
+      expect(toggle()).toHaveAttribute("aria-expanded", "true");
+      expect(panel()).not.toHaveAttribute("inert");
+    });
+
+    it.each(["{Enter}", " "])("toggles with the keyboard (%j)", async (key) => {
+      const { user } = renderRoute(`/country/${country.id}`);
+
+      toggle().focus();
+      await user.keyboard(key);
+
+      expect(toggle()).toHaveAttribute("aria-expanded", "false");
+    });
   });
 
   it("shows region cards without a map for a country that has no map", () => {

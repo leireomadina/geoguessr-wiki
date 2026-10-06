@@ -98,16 +98,31 @@ const CountryDetail: React.FC = () => {
 
       {country && country.regions && (
         <section className="resources-section">
-          <h2
-            className="section-title regions-toggle"
-            onClick={() => setRegionToggleOpen((prev) => !prev)}
-          >
-            Regions
-            <span className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}>
-              ▼
-            </span>
+          <h2 className="section-title">
+            {/* A real button: reachable by keyboard and announces open/closed */}
+            <button
+              type="button"
+              className="regions-toggle"
+              aria-expanded={isRegionToggleOpen}
+              aria-controls="regions-panel"
+              onClick={() => setRegionToggleOpen((prev) => !prev)}
+            >
+              Regions
+              <span
+                className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}
+                aria-hidden="true"
+              >
+                ▼
+              </span>
+            </button>
           </h2>
-          <div className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}>
+          {/* Collapsing is a CSS animation, so the content stays in the DOM;
+              `inert` keeps keyboard focus and screen readers out of it while closed. */}
+          <div
+            id="regions-panel"
+            className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}
+            inert={!isRegionToggleOpen}
+          >
             <div className="regions-grid">
               {country.regions.length > 0 ? (
                 country.regions.map((region, i) => (

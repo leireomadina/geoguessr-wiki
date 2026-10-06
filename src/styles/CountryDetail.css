@@ -281,14 +281,26 @@
   padding-bottom: 8px;
 }
 
+/* A <button> inside the section's <h2>: reset button styles so it looks like the heading */
 .regions-toggle {
+  background: none;
   border: none;
   padding: 0;
-  margin: 0 0 1rem;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.regions-toggle:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .regions-arrow {
