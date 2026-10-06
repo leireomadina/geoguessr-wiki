@@ -19,13 +19,12 @@ describe("unslugContinent", () => {
     expect(unslugContinent("north-america")).toBe("North America");
   });
 
-  it("does not lowercase the rest of an already-uppercase word", () => {
-    // Documents current behavior: only the first character of each segment
-    // is touched, so non-lowercase input is not normalized (only its hyphens
-    // are replaced with spaces). If the function is ever changed to lowercase
-    // the remainder first, update this.
-    expect(unslugContinent("NORTH-AMERICA")).toBe("NORTH AMERICA");
-  });
+  it.each(["NORTH-AMERICA", "North-America", "nOrTh-AmErIcA"])(
+    "is case-insensitive (%s)",
+    (slug) => {
+      expect(unslugContinent(slug)).toBe("North America");
+    },
+  );
 
   it("does not throw on an empty string", () => {
     expect(unslugContinent("")).toBe("");

@@ -66,6 +66,22 @@ describe("Continent page", () => {
     expect(screen.getByText("No countries")).toBeInTheDocument();
   });
 
+  it.each(["/continent/EUROPE", "/continent/Europe"])(
+    "accepts the continent in any case (%s)",
+    (path) => {
+      renderRoute(path);
+
+      expect(screen.getByRole("heading", { level: 1, name: "Europe" })).toBeInTheDocument();
+      expect(shownCountries()).toEqual(europe.map((country) => country.name));
+    },
+  );
+
+  it("accepts multi-word continents in capitals", () => {
+    renderRoute("/continent/NORTH-AMERICA");
+
+    expect(screen.getByRole("heading", { level: 1, name: "North America" })).toBeInTheDocument();
+  });
+
   it("shows the 404 page for an unknown continent", () => {
     renderRoute("/continent/atlantis");
 
