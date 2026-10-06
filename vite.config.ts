@@ -7,6 +7,7 @@ import babel from '@rolldown/plugin-babel'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // If you change this, also update `base` in public/404.html (not processed by Vite)
   base: '/geoguessr-wiki/',
   plugins: [
     react(),
