@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { countries } from "@/data/countries";
 import {
   getRegionMap,
@@ -44,6 +44,20 @@ describe("parseSvgRegions", () => {
     const regions = parseSvgRegions(svg(`<path title="Łódzkie" d="M0 0 Z" />`));
 
     expect(regions).toEqual({ Łódzkie: "M0 0 Z" });
+  });
+
+  it("strips a leading byte-order mark (BOM) before parsing", () => {
+    // amCharts SVGs start with a BOM. Browsers reject XML with anything before
+    // `<?xml` (so the map showed no regions), but jsdom accepts it, so check what
+    // reaches the parser instead of the result. e2e/region-map.spec.ts covers the browser.
+    const parse = vi.spyOn(DOMParser.prototype, "parseFromString");
+    const bomSvg = `\uFEFF<?xml version="1.0" encoding="utf-8"?>${svg(`<path title="Alpha" d="M0 0 Z" />`)}`;
+
+    const regions = parseSvgRegions(bomSvg);
+
+    expect(parse.mock.calls[0][0].startsWith("\uFEFF")).toBe(false);
+    expect(regions).toEqual({ Alpha: "M0 0 Z" });
+    parse.mockRestore();
   });
 
   it("returns an empty object for an SVG without paths", () => {
