@@ -27,7 +27,7 @@ The site is a static, data-driven SPA: most of what can break is **content** (th
 | Layer | Purpose | Tools | Status |
 |---|---|---|---|
 | 1. Unit | Pure logic: utils, SVG map parsing, region color assignment, the theme hook | Vitest | ✅ Done |
-| 2. Data integrity | Content can't silently break the site: valid ids, enums and URLs, and region names matching the SVG map shapes | Vitest | 🟡 Country data done, region map checks planned |
+| 2. Data integrity | Content can't silently break the site: valid ids, enums and URLs, and region names matching the SVG map shapes | Vitest | ✅ Done |
 | 3. Component / integration | Pages and components behave correctly through the real routes: search and filters, region selection, not-found pages, theme toggle | Vitest + Testing Library + user-event (jsdom) | ⏳ Planned |
 | 4. End-to-end | A few critical user journeys in a real browser against the built site, plus what jsdom can't do (SVG layout with `getBBox`) | Playwright (Chromium) | ⏳ Planned |
 

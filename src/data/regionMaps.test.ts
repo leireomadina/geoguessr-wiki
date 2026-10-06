@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { countries } from "@/data/countries";
 import {
   getRegionMap,
   hasRegionMap,
+  MAP_CONFIGS,
   matchLabels,
   parseSvgRegions,
 } from "@/data/regionMaps";
@@ -111,5 +113,50 @@ describe("getRegionMap", () => {
 
   it("caches the parsed map and returns the same object on later calls", () => {
     expect(getRegionMap("PL")).toBe(getRegionMap("PL"));
+  });
+});
+
+// Data integrity: a region only appears on the map when its name exactly
+// matches an SVG <path title>. RegionMap only warns about mismatches in dev, so
+// these checks make the same mistakes (typos, accents, whitespace) fail CI.
+describe.each(Object.keys(MAP_CONFIGS))("region map data for %s", (id) => {
+  const config = MAP_CONFIGS[id];
+  const country = countries.find((c) => c.id === id);
+  const shapeNames = Object.keys(parseSvgRegions(config.svg));
+  const regionNames = country?.regions?.map((region) => region.name) ?? [];
+
+  it("belongs to an existing country with regions", () => {
+    expect(country, `${id} is not in the country data`).toBeDefined();
+    expect(regionNames.length, `${id} has a map but no regions`).toBeGreaterThan(0);
+  });
+
+  it("has a map shape for every region", () => {
+    const shapes = new Set(shapeNames);
+    for (const name of regionNames) {
+      expect(shapes.has(name), `${id} region "${name}" has no SVG <path title>`).toBe(true);
+    }
+  });
+
+  it("has a region for every map shape", () => {
+    const regions = new Set(regionNames);
+    for (const name of shapeNames) {
+      expect(regions.has(name), `${id} SVG shape "${name}" has no region in the country data`).toBe(true);
+    }
+  });
+
+  it("only configures labels for existing map shapes", () => {
+    const shapes = new Set(shapeNames);
+    for (const [name, { label }] of Object.entries(config.labels ?? {})) {
+      expect(shapes.has(name), `${id} label for "${name}" matches no SVG shape`).toBe(true);
+      expect(label.trim(), `${id} label for "${name}"`).not.toBe("");
+    }
+  });
+
+  it("has a viewBox of 4 numbers with a positive width and height", () => {
+    const parts = config.viewBox.trim().split(/\s+/).map(Number);
+    expect(parts, `${id} viewBox "${config.viewBox}"`).toHaveLength(4);
+    expect(parts.every(Number.isFinite), `${id} viewBox "${config.viewBox}"`).toBe(true);
+    expect(parts[2], `${id} viewBox width`).toBeGreaterThan(0);
+    expect(parts[3], `${id} viewBox height`).toBeGreaterThan(0);
   });
 });

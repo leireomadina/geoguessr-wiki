@@ -3,7 +3,8 @@ import czechiaLow from "@/assets/maps/czechiaLow.svg?raw";
 import polandLow from "@/assets/maps/polandLow.svg?raw";
 import type { RegionMap, RegionMapConfig, RegionShape } from "@/types/regionMap";
 
-const MAP_CONFIGS: Record<string, RegionMapConfig> = {
+// Exported for the data-integrity tests; app code goes through hasRegionMap/getRegionMap.
+export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
   AU: {
     viewBox: "0 0 500 600",
     svg: australiaLow,
