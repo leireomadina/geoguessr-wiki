@@ -28,12 +28,12 @@ The site is a static, data-driven SPA: most of what can break is **content** (th
 |---|---|---|---|
 | 1. Unit | Pure logic: utils, SVG map parsing, region color assignment, the theme hook | Vitest | ✅ Done |
 | 2. Data integrity | Content can't silently break the site: valid ids, enums and URLs, and region names matching the SVG map shapes | Vitest | ✅ Done |
-| 3. Component / integration | Pages and components behave correctly through the real routes: search and filters, region selection, not-found pages, theme toggle | Vitest + Testing Library + user-event (jsdom) | ⏳ Planned |
+| 3. Component / integration | Pages and components behave correctly through the real routes: search and filters, region selection, not-found pages, theme toggle | Vitest + Testing Library + user-event (jsdom) | ✅ Done |
 | 4. End-to-end | A few critical user journeys in a real browser against the built site, plus what jsdom can't do (SVG layout with `getBBox`) | Playwright (Chromium) | ⏳ Planned |
 
 Guidelines:
 
-- **Test with the real data, not mocks.** Derive expected values from the data (e.g. `countries.filter((c) => c.continent === "Europe")`) instead of hard-coding counts, so adding a country never breaks a test.
+- **Test with the real data, not mocks.** Derive expected values from the data (e.g. `countries.filter((c) => c.continent === "Europe")`) instead of hard-coding counts, so adding a country never breaks a test. When a state doesn't exist in the real data yet (e.g. a country with empty `regions`), use a small fixture with `vi.mock("@/data/countries")` in its own test file, like `src/pages/CountryDetail.fixtures.test.tsx`.
 - **Name the culprit in data assertions.** Pass a message such as `expect(value, "ES studyLinks[1] url")`, so a failure points straight to the file to fix.
 - **Query the way users do:** by role, label or visible text, not by CSS class.
 - **Keep E2E small.** Anything that can be checked in jsdom belongs in layers 1–3, and Playwright covers only full journeys and real layout.
@@ -48,8 +48,9 @@ Not covered on purpose (for now):
 - **Unit, data and component tests:** next to the code they test, as `*.test.ts` or `*.test.tsx` (e.g. `src/utils/countryUtils.test.ts`).
 - **End-to-end tests:** in `e2e/*.spec.ts`. Vitest ignores this folder.
 - **Shared helpers:** in `src/test-utils/`.
-  - `setup.ts` runs before every test file. It adds the jest-dom matchers, mocks `matchMedia`, and unmounts rendered components and clears `localStorage` after each test.
+  - `setup.ts` runs before every test file. It adds the jest-dom matchers, mocks `matchMedia` and SVG `getBBox` (which jsdom lacks), and unmounts rendered components and clears `localStorage` after each test.
   - `matchMedia.ts` provides a controllable `matchMedia` mock, used to simulate OS light/dark changes.
+  - `renderRoute.tsx` renders the whole app (real routes and `Layout`) at a given path, e.g. `renderRoute("/country/ES")`. Pass several paths to have history to go back to.
 
 ### Running the tests
 
