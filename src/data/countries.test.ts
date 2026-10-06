@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { countries } from "@/data/countries";
-import { CONTINENTS, DIFFICULTIES, DRIVING_SIDES } from "@/data/enums";
+import { CONTINENTS } from "@/data/enums";
 
 // Every assertion below passes a message naming the country (and item), so a
 // failure points straight at the data file to fix, e.g. "ES studyLinks[1]".
+//
+// Enum fields (continent, difficulty, platforms, ...) aren't checked here: their
+// types come from src/data/enums.ts and every country file is typed as Country,
+// so the type-check already rejects invalid values. These tests cover what
+// TypeScript can't: uniqueness, formats, URLs and empty text.
 
 describe("country data", () => {
   it("has at least one country", () => {
@@ -26,19 +31,6 @@ describe("country data", () => {
     }
   });
 
-  it("only uses valid enum values", () => {
-    for (const country of countries) {
-      expect(CONTINENTS, `${country.id} continent`).toContain(
-        country.continent,
-      );
-      expect(DIFFICULTIES, `${country.id} difficulty`).toContain(
-        country.difficulty,
-      );
-      expect(DRIVING_SIDES, `${country.id} drivingSide`).toContain(
-        country.drivingSide,
-      );
-    }
-  });
 
   it("covers every continent", () => {
     const present = new Set(countries.map((country) => country.continent));
@@ -84,7 +76,6 @@ describe("country data", () => {
 
       country.meta?.forEach((item, i) => {
         const where = `${country.id} meta[${i}]`;
-        expect(DIFFICULTIES, `${where} tag`).toContain(item.tag);
         expect(item.label.trim(), `${where} label`).not.toBe("");
         expect(item.value.trim(), `${where} value`).not.toBe("");
       });

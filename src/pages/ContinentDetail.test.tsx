@@ -1,6 +1,7 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { countries } from "@/data/countries";
+import { DIFFICULTIES } from "@/data/enums";
 import { renderRoute } from "@/test-utils/renderRoute";
 import { formatCountryCount, sortCountriesByName } from "@/utils/countryUtils";
 
@@ -44,6 +45,20 @@ describe("Continent page", () => {
     await user.type(screen.getByRole("textbox"), target.id.toLowerCase());
 
     expect(shownCountries()).toContain(target.name);
+  });
+
+  it("offers every difficulty from the enums as a filter option", () => {
+    renderRoute("/continent/europe");
+
+    const options = within(screen.getByRole("combobox")).getAllByRole("option");
+    expect(options.map((option) => option.getAttribute("value"))).toEqual(["", ...DIFFICULTIES]);
+    expect(options.map((option) => option.textContent)).toEqual([
+      "All Difficulties",
+      "Easy",
+      "Medium",
+      "Hard",
+      "Very Hard",
+    ]);
   });
 
   it("filters by difficulty and updates the count", async () => {

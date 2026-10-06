@@ -1,26 +1,32 @@
+import type {
+  CONTINENTS,
+  DIFFICULTIES,
+  DRIVING_SIDES,
+  IMAGE_CATEGORIES,
+  STUDY_LINK_PLATFORMS,
+  VIDEO_LINK_PLATFORMS,
+} from "@/data/enums";
+
+// The allowed values live in src/data/enums.ts; each type below is derived from
+// its array, so the two can't drift apart.
+
 /** How hard a country is to guess in Geoguessr according to our personal experience. */
-export type Difficulty = "easy" | "medium" | "hard" | "very_hard";
+export type Difficulty = (typeof DIFFICULTIES)[number];
 
 /** Which side of the road cars drive on. */
-export type DrivingSide = "left" | "right";
+export type DrivingSide = (typeof DRIVING_SIDES)[number];
 
 /** The continent a country belongs to. */
-export type Continent =
-  | "Africa"
-  | "Asia"
-  | "Europe"
-  | "North America"
-  | "Oceania"
-  | "South America";
+export type Continent = (typeof CONTINENTS)[number];
 
 /** Where a study guide link is hosted. */
-export type StudyLinkPlatform = "website" | "google docs" | "other";
+export type StudyLinkPlatform = (typeof STUDY_LINK_PLATFORMS)[number];
 
 /** Where a video link is hosted. */
-export type VideoLinkPlatform = "youtube" | "vimeo" | "other";
+export type VideoLinkPlatform = (typeof VIDEO_LINK_PLATFORMS)[number];
 
 /** What kind of image a gallery image is. */
-export type ImageCategory = "flag" | "landscape" | "infographic" | "other";
+export type ImageCategory = (typeof IMAGE_CATEGORIES)[number];
 
 /**
  * A link to a study guide for the country:
