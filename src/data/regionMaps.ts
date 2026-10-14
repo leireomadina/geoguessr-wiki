@@ -3,7 +3,8 @@ import czechiaLow from "@/assets/maps/czechiaLow.svg?raw";
 import polandLow from "@/assets/maps/polandLow.svg?raw";
 import type { RegionMap, RegionMapConfig, RegionShape } from "@/types/regionMap";
 
-const MAP_CONFIGS: Record<string, RegionMapConfig> = {
+// Exported for the data-integrity tests; app code goes through hasRegionMap/getRegionMap.
+export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
   AU: {
     viewBox: "0 0 500 600",
     svg: australiaLow,
@@ -74,7 +75,10 @@ const parsedCache = new Map<string, RegionMap>();
 // Extracts each `<path>`'s `title` (region name) and `d` (shape data) from a
 // raw SVG string. Knows nothing about labels or configs.
 export function parseSvgRegions(svg: string): Record<string, string> {
-  const svgDocument = new DOMParser().parseFromString(svg, "image/svg+xml");
+  // amCharts SVGs start with a byte-order mark (BOM). Browsers reject XML with
+  // anything before `<?xml`, which would leave the map with no regions.
+  const withoutBom = svg.replace(/^\uFEFF/, "");
+  const svgDocument = new DOMParser().parseFromString(withoutBom, "image/svg+xml");
   const regions: Record<string, string> = {};
 
   for (const pathElement of Array.from(svgDocument.querySelectorAll("path"))) {
