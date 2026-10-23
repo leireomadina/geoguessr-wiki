@@ -139,9 +139,9 @@ describe.each(Object.keys(MAP_CONFIGS))("region map data for %s", (id) => {
   const shapeNames = Object.keys(parseSvgRegions(config.svg));
   const regionNames = country?.regions?.map((region) => region.name) ?? [];
 
-  it("belongs to an existing country with regions", () => {
+  it("belongs to an existing country with a regions list", () => {
     expect(country, `${id} is not in the country data`).toBeDefined();
-    expect(regionNames.length, `${id} has a map but no regions`).toBeGreaterThan(0);
+    expect(country?.regions, `${id} has a map but no regions list`).toBeDefined();
   });
 
   it("has a map shape for every region", () => {
@@ -151,7 +151,8 @@ describe.each(Object.keys(MAP_CONFIGS))("region map data for %s", (id) => {
     }
   });
 
-  it("has a region for every map shape", () => {
+  // An empty regions list is allowed: the map then shows every shape by name.
+  it.skipIf(regionNames.length === 0)("has a region for every map shape", () => {
     const regions = new Set(regionNames);
     for (const name of shapeNames) {
       expect(regions.has(name), `${id} SVG shape "${name}" has no region in the country data`).toBe(true);

@@ -16,10 +16,12 @@ export interface RegionShape {
  * The parsed, render-ready map for a country:
  * - `viewBox`: `viewBox` attribute (e.g. "0 0 500 600") for the map's root `<svg>`; amCharts SVGs lack one.
  * - `regions`: region name (matches `Region.name` in the country data) -> shape to render.
+ * - `labelScale`: multiplier for the label font size (1 = default).
  */
 export interface RegionMap {
   viewBox: string;
   regions: Record<string, RegionShape>;
+  labelScale: number;
 }
 
 /**
@@ -29,9 +31,12 @@ export interface RegionMap {
  * - `labels`: region name -> label settings (everything of a RegionShape except
  *   the path data `d`). Optional: when a region has no entry, its label falls
  *   back to the region name itself.
+ * - `labelScale` (optional): shrinks or grows every label, for maps with many
+ *   small regions (e.g. 0.5 for Russia). Defaults to 1.
  */
 export interface RegionMapConfig {
   viewBox: string;
   svg: string;
   labels?: Record<string, Omit<RegionShape, "d">>;
+  labelScale?: number;
 }

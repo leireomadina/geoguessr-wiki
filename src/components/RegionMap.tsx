@@ -37,6 +37,12 @@ interface Box {
   area: number;
 }
 
+const boxesOverlap = (a: DOMRect, b: DOMRect): boolean =>
+  a.x < b.x + b.width &&
+  b.x < a.x + a.width &&
+  a.y < b.y + b.height &&
+  b.y < a.y + a.height;
+
 // Label layout tuning: how much of a shape's width a label may occupy before
 // it is placed beside the shape instead, and the gap between shape and label.
 const LABEL_FIT_RATIO = 0.85;
@@ -85,7 +91,9 @@ const RegionMap: React.FC<RegionMapProps> = ({
       }
     }
 
-    const viewBoxWidth = Number(countryMap.viewBox.split(" ")[2]);
+    const [viewBoxX, , viewBoxWidth] = countryMap.viewBox
+      .split(" ")
+      .map(Number);
 
     const mainSubPathBox = (shapeElement: SVGPathElement): Box | undefined => {
       const pathData = shapeElement.getAttribute("d") ?? "";
@@ -129,14 +137,25 @@ const RegionMap: React.FC<RegionMapProps> = ({
 
     const fillColors = assignRegionColors(regionBoxes);
 
-    for (
-      let regionIndex = 0;
-      regionIndex < regionGroups.length;
-      regionIndex++
-    ) {
+    // Labels live in their own layer (same order as the groups) so that no
+    // shape drawn later can cover them.
+    const labelElements = Array.from(
+      svgElement.querySelectorAll<SVGTextElement>(".region-label"),
+    );
+
+    // Labels are placed from the largest region to the smallest, so when two
+    // labels would collide the bigger region keeps its label.
+    const placementOrder = regionGroups
+      .map((_, regionIndex) => regionIndex)
+      .sort(
+        (a, b) => (regionBoxes[b]?.area ?? 0) - (regionBoxes[a]?.area ?? 0),
+      );
+    const placedLabelBoxes: DOMRect[] = [];
+
+    for (const regionIndex of placementOrder) {
       const group = regionGroups[regionIndex];
       const shapeElement = group.querySelector<SVGPathElement>(".region-shape");
-      const labelElement = group.querySelector<SVGTextElement>(".region-label");
+      const labelElement = labelElements[regionIndex];
       if (!shapeElement || !labelElement) continue;
 
       const regionBox = regionBoxes[regionIndex];
@@ -144,6 +163,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
 
       shapeElement.style.fill = fillColors[regionIndex] ?? "";
 
+      labelElement.style.display = "";
       const labelBox = labelElement.getBBox();
       const centerX = regionBox.x + regionBox.width / 2;
       const centerY = regionBox.y + regionBox.height / 2;
@@ -156,7 +176,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
         labelElement.setAttribute("text-anchor", "middle");
       } else if (
         regionBox.x + regionBox.width + LABEL_OFFSET_PX + labelBox.width <=
-        viewBoxWidth
+        viewBoxX + viewBoxWidth
       ) {
         labelElement.setAttribute(
           "x",
@@ -166,6 +186,21 @@ const RegionMap: React.FC<RegionMapProps> = ({
       } else {
         labelElement.setAttribute("x", String(regionBox.x - LABEL_OFFSET_PX));
         labelElement.setAttribute("text-anchor", "end");
+      }
+
+      // Dense maps (e.g. Russia's small western oblasts) have no room for
+      // every label: hide one that would overlap a placed label or leave the
+      // map. The region stays selectable through its card.
+      const placedBox = labelElement.getBBox();
+      const collides =
+        placedBox.x < viewBoxX ||
+        placedBox.x + placedBox.width > viewBoxX + viewBoxWidth ||
+        placedLabelBoxes.some((box) => boxesOverlap(box, placedBox));
+
+      if (collides) {
+        labelElement.style.display = "none";
+      } else {
+        placedLabelBoxes.push(placedBox);
       }
     }
   }, [countryMap, regions]);
@@ -178,6 +213,11 @@ const RegionMap: React.FC<RegionMapProps> = ({
         ref={svgRef}
         className="region-map"
         viewBox={countryMap.viewBox}
+        style={
+          {
+            "--region-label-scale": countryMap.labelScale,
+          } as React.CSSProperties
+        }
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
       >
@@ -207,10 +247,21 @@ const RegionMap: React.FC<RegionMapProps> = ({
                 className={`region-shape${selected ? " selected" : ""}`}
                 d={shape.d}
               />
-              <text className="region-label">{shape.label}</text>
             </g>
           );
         })}
+        <g className="region-labels" aria-hidden="true">
+          {regions.map((region) => {
+            const shape = countryMap.regions[region.name];
+            if (!shape) return null;
+
+            return (
+              <text key={region.name} className="region-label">
+                {shape.label}
+              </text>
+            );
+          })}
+        </g>
       </svg>
       <span className="sr-only" aria-live="polite">
         {regions[selectedIndex]

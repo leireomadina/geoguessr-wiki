@@ -40,7 +40,7 @@
 .region-label {
   fill: #ffffff;
   font-weight: 900;
-  font-size: 15px;
+  font-size: calc(15px * var(--region-label-scale, 1));
   text-transform: uppercase;
   letter-spacing: 0.03em;
   pointer-events: none;
@@ -53,6 +53,6 @@
 
 @media (max-width: 600px) {
   .region-label {
-    font-size: 11px;
+    font-size: calc(11px * var(--region-label-scale, 1));
   }
 }

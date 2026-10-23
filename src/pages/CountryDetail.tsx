@@ -6,8 +6,8 @@ import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
 import RegionMap from "@/components/RegionMap";
 import { DIFFICULTIES } from "@/data/enums";
-import { hasRegionMap } from "@/data/regionMaps";
-import type { Difficulty } from "@/types/country";
+import { getRegionMap, hasRegionMap } from "@/data/regionMaps";
+import type { Difficulty, Region } from "@/types/country";
 import NotFound from "./NotFound";
 
 const CountryDetail: React.FC = () => {
@@ -34,6 +34,14 @@ const CountryDetail: React.FC = () => {
   if (!country) {
     return <NotFound />;
   }
+
+  // A country can have a map before its region cards are written: the map
+  // then lists every shape by name, and the cards show "Coming soon".
+  const mapRegions: Region[] = country.regions?.length
+    ? country.regions
+    : Object.keys(getRegionMap(country.id)?.regions ?? {})
+        .sort((a, b) => a.localeCompare(b))
+        .map((name) => ({ name }));
 
   return (
     <div className="country-detail-container">
@@ -146,35 +154,35 @@ const CountryDetail: React.FC = () => {
               )}
             </div>
 
-            {hasMap && country.regions.length > 0 && (
+            {hasMap && mapRegions.length > 0 && (
               <div className="regions-explore">
                 <div className="region-map-frame">
                   <RegionMap
                     countryId={country.id}
-                    regions={country.regions}
+                    regions={mapRegions}
                     selectedIndex={selectedRegion}
                     onSelect={setSelectedRegion}
                   />
                 </div>
                 <aside className="region-detail-panel">
-                  {country.regions[selectedRegion] && (
+                  {mapRegions[selectedRegion] && (
                     <>
                       <span className="region-detail-index">
-                        Region {selectedRegion + 1} / {country.regions.length}
+                        Region {selectedRegion + 1} / {mapRegions.length}
                       </span>
                       <span className="region-detail-icon">
-                        {country.regions[selectedRegion].icon}
+                        {mapRegions[selectedRegion].icon}
                       </span>
                       <h3 className="region-detail-name">
-                        {country.regions[selectedRegion].name}
+                        {mapRegions[selectedRegion].name}
                       </h3>
-                      {country.regions[selectedRegion].cities && (
+                      {mapRegions[selectedRegion].cities && (
                         <p className="region-detail-cities">
-                          {country.regions[selectedRegion].cities}
+                          {mapRegions[selectedRegion].cities}
                         </p>
                       )}
                       <p className="region-detail-description">
-                        {country.regions[selectedRegion].description}
+                        {mapRegions[selectedRegion].description}
                       </p>
                       <div className="region-card region-placeholder region-detail-coming-soon">
                         <span className="region-icon">🚧</span>

@@ -147,6 +147,22 @@ describe("Country page", () => {
     expect(screen.queryByRole("button", { name: new RegExp(country.regions![0].name) })).not.toBeInTheDocument();
   });
 
+  it("shows the map with every shape by name when the regions list is empty", async () => {
+    const country = findCountry("with a region map but no region cards", (c) =>
+      hasRegionMap(c.id) && c.regions?.length === 0,
+    );
+    const { user } = renderRoute(`/country/${country.id}`);
+
+    expect(screen.getByText(/Regions for this country are currently being prepared/)).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: /Interactive region map/ })).toBeInTheDocument();
+
+    const [, second] = screen.getAllByRole("button", { name: /^Select / });
+    await user.click(second);
+
+    expect(second).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText(/^Region 2 \/ \d+$/)).toBeInTheDocument();
+  });
+
   describe("with an interactive region map", () => {
     const country = findCountry("with a region map", (c) => hasRegionMap(c.id) && !!c.regions?.length);
     const regions = country.regions!;

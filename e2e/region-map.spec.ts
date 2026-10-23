@@ -63,3 +63,28 @@ test("regions can be selected with the keyboard", async ({ page }) => {
 
   await expect(shape).toHaveAttribute("aria-pressed", "true");
 });
+
+test("hides labels that would overlap on a dense map", async ({ page }) => {
+  await page.goto("country/RU");
+  await expect(page.getByRole("group", { name: /Interactive region map/ })).toBeVisible();
+
+  const boxes = await page
+    .locator(".region-map .region-label")
+    .evaluateAll((elements) =>
+      elements
+        .filter((element) => (element as SVGTextElement).style.display !== "none")
+        .map((element) => {
+          const box = (element as SVGTextElement).getBBox();
+          return { text: element.textContent, x: box.x, y: box.y, width: box.width, height: box.height };
+        }),
+    );
+
+  expect(boxes.length).toBeGreaterThan(0);
+  for (const [index, a] of boxes.entries()) {
+    for (const b of boxes.slice(index + 1)) {
+      const overlap =
+        a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+      expect(overlap, `${a.text} overlaps ${b.text}`).toBe(false);
+    }
+  }
+});
