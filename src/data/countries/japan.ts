@@ -29,7 +29,7 @@ const country: Country = {
       description: "Largest metropolitan area in the world",
     },
     {
-      name: "Hokoriku",
+      name: "Hokuriku",
       icon: "🏔️",
       cities: "Kanazawa",
       description: "Sea of Japan coast with heavy snowfall and traditional towns",

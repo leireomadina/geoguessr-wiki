@@ -73,6 +73,24 @@ const country: Country = {
       cities: "St. John's",
       description: "Most eastern province with rugged coast",
     },
+    {
+      name: "Yukon",
+      icon: "🏔️",
+      cities: "Whitehorse",
+      description: "Mountainous northwestern territory along the Alaska Highway",
+    },
+    {
+      name: "Northwest Territories",
+      icon: "🌌",
+      cities: "Yellowknife",
+      description: "Subarctic boreal forest and tundra with very sparse coverage",
+    },
+    {
+      name: "Nunavut",
+      icon: "🧊",
+      cities: "Iqaluit",
+      description: "Arctic territory with treeless tundra and no road links south",
+    },
   ],
 };
 
