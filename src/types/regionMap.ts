@@ -21,11 +21,15 @@ export interface RegionShape {
  * - `viewBox`: `viewBox` attribute (e.g. "0 0 500 600") for the map's root `<svg>`; amCharts SVGs lack one.
  * - `regions`: region name (matches `Region.name` in the country data) -> shape to render.
  * - `labelsBesideShapes`: whether a label too big for its shape is placed next to it.
+ * - `labelScale`: multiplier for every label's font size (1 = default).
+ * - `wide`: whether the map gets the wide layout on the country page.
  */
 export interface RegionMap {
   viewBox: string;
   regions: Record<string, RegionShape>;
   labelsBesideShapes: boolean;
+  labelScale: number;
+  wide: boolean;
 }
 
 /**
@@ -38,10 +42,18 @@ export interface RegionMap {
  * - `labelsBesideShapes` (optional): set to false on dense maps (e.g. Russia)
  *   to hide a label that doesn't fit inside its shape instead of placing it
  *   next to it. Defaults to true.
+ * - `labelScale` (optional): shrinks or grows every label, for maps whose
+ *   viewBox units are much bigger or smaller on screen (e.g. 0.3 for Russia).
+ *   Defaults to 1.
+ * - `wide` (optional): for very wide maps (e.g. Russia, about 3:1), give the
+ *   map most of the row next to the region panel instead of a third of it.
+ *   Defaults to false.
  */
 export interface RegionMapConfig {
   viewBox: string;
   svg: string;
   labels?: Record<string, Omit<RegionShape, "d">>;
   labelsBesideShapes?: boolean;
+  labelScale?: number;
+  wide?: boolean;
 }

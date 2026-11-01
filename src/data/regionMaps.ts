@@ -67,6 +67,8 @@ export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
     viewBox: "522 328 450 300",
     svg: russiaLow,
     labelsBesideShapes: false,
+    labelScale: 0.3,
+    wide: true,
     labels: {
       "Altai Krai": { label: "Altai Krai" },
       "Altai Republic": { label: "Altai Rep." },
@@ -221,6 +223,8 @@ export function getRegionMap(countryId: string): RegionMap | undefined {
     viewBox: config.viewBox,
     regions: matchLabels(parseSvgRegions(config.svg), config.labels),
     labelsBesideShapes: config.labelsBesideShapes ?? true,
+    labelScale: config.labelScale ?? 1,
+    wide: config.wide ?? false,
   };
 
   parsedCache.set(countryId, map);

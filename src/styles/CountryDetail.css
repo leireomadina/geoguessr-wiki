@@ -369,34 +369,21 @@
 }
 
 /* Russia — 70% map / 30% detail */
-.regions-explore--ru {
+/* Very wide maps (e.g. Russia): the map takes most of the row and fills its
+   frame edge to edge. Set with `wide: true` in the map's config. */
+.regions-explore--wide {
   grid-template-columns: 7fr 3fr;
-  gap: 1.5rem;
   align-items: start;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  overflow: visible;
 }
 
-.regions-explore--ru .region-map-frame {
+.regions-explore--wide .region-map-frame {
   display: block;
   padding: 0;
-  overflow: visible;
-  align-self: start;
-  height: auto;
-  min-height: 0;
-}
-
-.regions-explore--ru .region-map--ru {
-  width: 100%;
-  height: auto;
-  display: block;
-  overflow: visible;
 }
 
 @media (max-width: 900px) {
-  .regions-explore--ru {
+  .regions-explore--wide {
     grid-template-columns: 1fr;
   }
 }

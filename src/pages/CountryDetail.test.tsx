@@ -102,7 +102,7 @@ describe("Country page", () => {
 
       expect(screen.getByRole("heading", { level: 3, name: "Regions list" })).toContainElement(toggle());
       expect(panel()).toContainElement(
-        screen.getByRole("heading", { level: 3, name: country.regions![0].name }),
+        screen.getByRole("heading", { level: 4, name: country.regions![0].name }),
       );
     });
 
@@ -140,7 +140,7 @@ describe("Country page", () => {
     renderRoute(`/country/${country.id}`);
 
     for (const region of country.regions!) {
-      expect(screen.getByRole("heading", { level: 3, name: region.name })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 4, name: region.name })).toBeInTheDocument();
     }
     expect(screen.queryByRole("group", { name: /Interactive region map/ })).not.toBeInTheDocument();
     // Cards are only selectable when there's a map to select on

@@ -187,8 +187,13 @@ const RegionMap: React.FC<RegionMapProps> = ({
     <>
       <svg
         ref={svgRef}
-        className={`region-map region-map--${countryId.toLowerCase()}`}
+        className="region-map"
         viewBox={countryMap.viewBox}
+        style={
+          {
+            "--region-label-scale": countryMap.labelScale,
+          } as React.CSSProperties
+        }
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
       >

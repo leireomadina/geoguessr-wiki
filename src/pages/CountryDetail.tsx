@@ -6,7 +6,7 @@ import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
 import RegionMap from "@/components/RegionMap";
 import { DIFFICULTIES } from "@/data/enums";
-import { hasRegionMap } from "@/data/regionMaps";
+import { getRegionMap, hasRegionMap } from "@/data/regionMaps";
 import type { Difficulty } from "@/types/country";
 import NotFound from "./NotFound";
 
@@ -110,7 +110,7 @@ const CountryDetail: React.FC = () => {
           <h2 className="section-title">Regions</h2>
           {hasMap && country.regions.length > 0 && (
             <div
-              className={`regions-explore ${country.id === "RU" ? "regions-explore--ru" : ""}`}
+              className={`regions-explore${getRegionMap(country.id)?.wide ? " regions-explore--wide" : ""}`}
             >
               <div className="region-map-frame">
                 <RegionMap
@@ -143,7 +143,7 @@ const CountryDetail: React.FC = () => {
                     <div className="region-card region-placeholder region-detail-coming-soon">
                       <span className="region-icon">🚧</span>
                       <div className="region-info">
-                        <h3 className="region-name">Coming soon</h3>
+                        <h4 className="region-name">Coming soon</h4>
                         <p className="region-description">
                           More info about this region is being prepared. Check back later!
                         </p>
@@ -194,7 +194,7 @@ const CountryDetail: React.FC = () => {
                   <div className="region-card region-placeholder">
                     <span className="region-icon">🚧</span>
                     <div className="region-info">
-                      <h3 className="region-name">Coming soon</h3>
+                      <h4 className="region-name">Coming soon</h4>
                       <p className="region-description">
                         Regions for this country are currently being prepared. Check back later!
                       </p>

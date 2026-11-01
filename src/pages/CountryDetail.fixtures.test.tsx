@@ -43,7 +43,7 @@ describe("Country page (fixture data)", () => {
     renderRoute("/country/XA");
 
     expect(screen.getByRole("heading", { level: 2, name: /Regions/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3, name: "Coming soon" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 4, name: "Coming soon" })).toBeInTheDocument();
   });
 
   it("shows a message when there are no study links", () => {
