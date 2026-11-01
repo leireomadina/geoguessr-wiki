@@ -266,19 +266,40 @@
   line-height: 1.1;
 }
 
+/* Collapses by animating the grid row from 0fr to 1fr, so the open list is
+   always exactly as tall as its content, however many regions there are
+   (a max-height cap would cut off or spill over long lists like Russia's). */
 .regions-grid-wrapper {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
-  overflow: hidden;
   transition:
-    max-height 0.35s ease,
+    grid-template-rows 0.35s ease,
     opacity 0.25s ease;
 }
 
 .regions-grid-wrapper.open {
-  max-height: 8000px;
+  grid-template-rows: 1fr;
   opacity: 1;
-  padding-bottom: 8px;
+}
+
+/* The row's only child must be allowed to shrink to 0 and clip while closed.
+   The padding (offset by negative margins) leaves room for what cards draw
+   outside their box, which overflow: hidden would otherwise cut off: the
+   offset shadows (right/bottom, up to 14px on hover) and the 2px hover lift
+   (top/left). */
+.regions-grid-wrapper > .regions-grid {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 14px 0 2px;
+  margin: 0 -14px 0 -2px;
+}
+
+/* Top and bottom room only while open, so a closed list takes no space. */
+.regions-grid-wrapper.open > .regions-grid {
+  padding-top: 2px;
+  padding-bottom: 14px;
+  margin-top: -2px;
 }
 
 /* A <button> inside the section's <h2>: reset button styles so it looks like the heading */
@@ -371,10 +392,6 @@
   width: 100%;
   height: auto;
   display: block;
-  overflow: visible;
-}
-
-.regions-grid-wrapper.open {
   overflow: visible;
 }
 

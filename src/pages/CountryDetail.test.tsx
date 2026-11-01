@@ -189,6 +189,21 @@ describe("Country page", () => {
         "false",
       );
     });
+
+    it("starts at the first region again after moving to another country", async () => {
+      // Two mapped countries, the second with more regions, so its last region's
+      // index is out of range for the first one.
+      const mapped = countries.filter((c) => hasRegionMap(c.id) && !!c.regions?.length);
+      const [fewer, more] = [...mapped].sort((a, b) => a.regions!.length - b.regions!.length);
+      const last = more.regions![more.regions!.length - 1];
+      const { user } = renderRoute(`/country/${fewer.id}`, `/country/${more.id}`);
+
+      await user.click(screen.getByRole("button", { name: `Select ${last.name}` }));
+      await user.click(screen.getByRole("button", { name: "←" }));
+
+      expect(screen.getByRole("heading", { level: 1, name: fewer.name })).toBeInTheDocument();
+      expect(screen.getByText(`Region 1 / ${fewer.regions!.length}`)).toBeInTheDocument();
+    });
   });
 
   it("goes back to the previous page with the back button", async () => {

@@ -16,6 +16,15 @@ const CountryDetail: React.FC = () => {
   const [isRegionToggleOpen, setRegionToggleOpen] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState(0);
 
+  // The page stays mounted when only the :id changes (e.g. going back in
+  // history), so start each country at its first region: an index left over
+  // from another country could point past the end of this one's regions.
+  const [selectionCountryId, setSelectionCountryId] = useState(id);
+  if (id !== selectionCountryId) {
+    setSelectionCountryId(id);
+    setSelectedRegion(0);
+  }
+
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
   );
