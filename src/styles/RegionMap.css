@@ -40,19 +40,27 @@
 .region-label {
   fill: #ffffff;
   font-weight: 900;
-  font-size: 15px;
+  font-size: calc(15px * var(--region-label-scale, 1));
   text-transform: uppercase;
   letter-spacing: 0.03em;
   pointer-events: none;
   user-select: none;
   paint-order: stroke;
   stroke: var(--shadow-hard);
-  stroke-width: 2.5px;
+  /* The outline shrinks with the label, but less, so small labels stay legible */
+  stroke-width: calc(2.5px * max(var(--region-label-scale, 1), 0.5));
   stroke-linejoin: round;
 }
 
 @media (max-width: 600px) {
   .region-label {
-    font-size: 11px;
+    font-size: calc(11px * var(--region-label-scale, 1));
+  }
+
+  /* Dense maps (`labelsOnPhones: false`, e.g. Russia) are just colors on a
+     phone: their labels would be too small to read. Selecting a region still
+     shows its name in the region panel. */
+  .region-map--no-phone-labels .region-label {
+    display: none;
   }
 }
