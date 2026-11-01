@@ -167,7 +167,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
       labelElement.setAttribute("x", String(centerX));
       labelElement.setAttribute("text-anchor", "middle");
     }
-  }, [countryMap, regions]);
+  }, [countryId, countryMap, regions]);
 
   if (!countryMap) return null;
 

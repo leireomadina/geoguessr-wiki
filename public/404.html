@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <title>Redirecting…</title>
     <script>
+      // GitHub Pages serves this file for any path that doesn't exist (e.g. a
+      // direct link to /geoguessr-wiki/country/PL). It saves the path and
+      // redirects to the app, and src/main.tsx restores it.
       ;(function () {
+        // Must match `base` in vite.config.ts (without the trailing slash).
+        // Files in public/ aren't processed by Vite, so it can't be read from there.
         const base = '/geoguessr-wiki'
         const path = location.pathname.slice(base.length) || '/'
         sessionStorage.setItem('gh-pages-redirect', path + location.search)

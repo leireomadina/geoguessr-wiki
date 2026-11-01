@@ -4,18 +4,42 @@ const country: Country = {
   id: "LV",
   name: "Latvia",
   continent: "Europe",
-  difficulty: "medium",
+  difficulty: "hard",
   drivingSide: "right",
   studyLinks: [
     { label: "Plonkit Guide", url: "https://www.plonkit.net/latvia" },
   ],
   regions: [
-    { name: "Riga", icon: "🏙️", cities: "Riga", description: "Capital on the Daugava, Art Nouveau centre" },
-    { name: "Pierīga", icon: "🌲", cities: "Jūrmala", description: "Coastal pine forests and beach towns around Riga" },
-    { name: "Vidzeme", icon: "🌲", cities: "Cēsis, Valmiera", description: "Forested northeast, Gauja National Park" },
-    { name: "Kurzeme", icon: "🌊", cities: "Liepāja, Ventspils", description: "Western Baltic coast, dunes and fishing ports" },
-    { name: "Zemgale", icon: "🌾", cities: "Jelgava", description: "Flat southern plains, farmland" },
-    { name: "Latgale", icon: "🏞️", cities: "Daugavpils, Rēzekne", description: "Eastern lakes and hills, Orthodox and latgalian culture" },
+    {
+      name: "Vidzeme",
+      icon: "🌳",
+      cities: "Valmiera, Cēsis, Sigulda",
+      description: "Northeastern region with the Gauja valley and forests",
+    },
+    {
+      name: "Riga",
+      icon: "🏙️",
+      cities: "Riga, Jūrmala",
+      description: "Capital with Art Nouveau buildings and beach resorts",
+    },
+    {
+      name: "Kurzeme",
+      icon: "🌊",
+      cities: "Liepāja, Ventspils, Kuldīga",
+      description: "Western Courland coast with ports and long beaches",
+    },
+    {
+      name: "Zemgale",
+      icon: "🌾",
+      cities: "Jelgava, Bauska, Jēkabpils",
+      description: "Flat, fertile farmland south of Riga",
+    },
+    {
+      name: "Latgale",
+      icon: "💧",
+      cities: "Daugavpils, Rēzekne",
+      description: "Southeastern lake district with a large Russian-speaking population",
+    },
   ],
 };
 
