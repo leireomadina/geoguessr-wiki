@@ -24,8 +24,9 @@ export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
     viewBox: "0 440 612 355",
     svg: czechiaLow,
     labels: {
-      "Praha": { label: "Prague" },
-      "Středočeský kraj": { label: "Středoč." },
+      // Prague sits inside Central Bohemia, so both labels are placed by hand.
+      "Praha": { label: "Prague", labelPosition: { x: 215, y: 584 } },
+      "Středočeský kraj": { label: "Středoč.", labelPosition: { x: 215, y: 622 } },
       "Jihočeský kraj": { label: "Jihoč." },
       "Plzeňský kraj": { label: "Plzeň" },
       "Karlovarský kraj": { label: "Karl. Vary" },
@@ -65,6 +66,7 @@ export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
   RU: {
     viewBox: "522 328 450 300",
     svg: russiaLow,
+    labelsBesideShapes: false,
     labels: {
       "Altai Krai": { label: "Altai Krai" },
       "Altai Republic": { label: "Altai Rep." },
@@ -218,6 +220,7 @@ export function getRegionMap(countryId: string): RegionMap | undefined {
   const map = {
     viewBox: config.viewBox,
     regions: matchLabels(parseSvgRegions(config.svg), config.labels),
+    labelsBesideShapes: config.labelsBesideShapes ?? true,
   };
 
   parsedCache.set(countryId, map);

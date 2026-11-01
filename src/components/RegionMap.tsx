@@ -37,9 +37,10 @@ interface Box {
   area: number;
 }
 
-// Label layout tuning: how much of a shape's width a label may occupy.
-// If it doesn't fit, the label is hidden — small western oblasts stay clean.
+// Label layout tuning: how much of a shape's width a label may occupy before
+// it is placed beside the shape instead, and the gap between shape and label.
 const LABEL_FIT_RATIO = 0.85;
+const LABEL_OFFSET_PX = 8;
 
 const RegionMap: React.FC<RegionMapProps> = ({
   countryId,
@@ -84,6 +85,8 @@ const RegionMap: React.FC<RegionMapProps> = ({
       }
     }
 
+    const viewBoxWidth = Number(countryMap.viewBox.split(" ")[2]);
+
     const mainSubPathBox = (shapeElement: SVGPathElement): Box | undefined => {
       const pathData = shapeElement.getAttribute("d") ?? "";
       let largestBox: Box | undefined;
@@ -125,9 +128,6 @@ const RegionMap: React.FC<RegionMapProps> = ({
     });
 
     const fillColors = assignRegionColors(regionBoxes);
-    const [, , vbW, vbH] = countryMap.viewBox.split(" ").map(Number);
-    const viewBoxArea = vbW * vbH;
-    const isRussia = countryId === "RU";
 
     for (
       let regionIndex = 0;
@@ -144,30 +144,42 @@ const RegionMap: React.FC<RegionMapProps> = ({
 
       shapeElement.style.fill = fillColors[regionIndex] ?? "";
 
+      // A label with a hand-picked position in the map config keeps it.
+      if (labelElement.hasAttribute("data-fixed")) continue;
+
+      // Show the label before measuring it: a label hidden on an earlier run
+      // would otherwise measure 0 wide.
+      labelElement.style.display = "";
       const labelBox = labelElement.getBBox();
       const centerX = regionBox.x + regionBox.width / 2;
       const centerY = regionBox.y + regionBox.height / 2;
       const labelFits = labelBox.width <= regionBox.width * LABEL_FIT_RATIO;
-      const isTiny = isRussia
-        ? regionBox.area < viewBoxArea * 0.004 ||
-          regionBox.width < vbW * 0.04 ||
-          regionBox.height < vbH * 0.07
-        : regionBox.area < viewBoxArea * 0.0012 ||
-          regionBox.width < vbW * 0.025 ||
-          regionBox.height < vbH * 0.045;
-
-      if (!labelFits || isTiny) {
-        labelElement.style.display = "none";
-        continue;
-      }
-
-      labelElement.style.display = "";
       labelElement.setAttribute("y", String(centerY));
       labelElement.setAttribute("dominant-baseline", "central");
-      labelElement.setAttribute("x", String(centerX));
-      labelElement.setAttribute("text-anchor", "middle");
+
+      if (labelFits) {
+        labelElement.setAttribute("x", String(centerX));
+        labelElement.setAttribute("text-anchor", "middle");
+      } else if (!countryMap.labelsBesideShapes) {
+        // Dense maps (e.g. Russia) hide a label that doesn't fit instead of
+        // placing it beside the shape. The region stays selectable through
+        // its card.
+        labelElement.style.display = "none";
+      } else if (
+        regionBox.x + regionBox.width + LABEL_OFFSET_PX + labelBox.width <=
+        viewBoxWidth
+      ) {
+        labelElement.setAttribute(
+          "x",
+          String(regionBox.x + regionBox.width + LABEL_OFFSET_PX),
+        );
+        labelElement.setAttribute("text-anchor", "start");
+      } else {
+        labelElement.setAttribute("x", String(regionBox.x - LABEL_OFFSET_PX));
+        labelElement.setAttribute("text-anchor", "end");
+      }
     }
-  }, [countryId, countryMap, regions]);
+  }, [countryMap, regions]);
 
   if (!countryMap) return null;
 
@@ -206,7 +218,20 @@ const RegionMap: React.FC<RegionMapProps> = ({
                 className={`region-shape${selected ? " selected" : ""}`}
                 d={shape.d}
               />
-              <text className="region-label">{shape.label}</text>
+              {shape.labelPosition ? (
+                <text
+                  className="region-label"
+                  data-fixed=""
+                  x={shape.labelPosition.x}
+                  y={shape.labelPosition.y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                >
+                  {shape.label}
+                </text>
+              ) : (
+                <text className="region-label">{shape.label}</text>
+              )}
             </g>
           );
         })}
