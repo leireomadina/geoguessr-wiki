@@ -69,6 +69,7 @@ export const MAP_CONFIGS: Record<string, RegionMapConfig> = {
     labelsBesideShapes: false,
     labelScale: 0.3,
     wide: true,
+    labelsOnPhones: false,
     labels: {
       "Altai Krai": { label: "Altai Krai" },
       "Altai Republic": { label: "Altai Rep." },
@@ -225,6 +226,7 @@ export function getRegionMap(countryId: string): RegionMap | undefined {
     labelsBesideShapes: config.labelsBesideShapes ?? true,
     labelScale: config.labelScale ?? 1,
     wide: config.wide ?? false,
+    labelsOnPhones: config.labelsOnPhones ?? true,
   };
 
   parsedCache.set(countryId, map);

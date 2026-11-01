@@ -23,6 +23,7 @@ export interface RegionShape {
  * - `labelsBesideShapes`: whether a label too big for its shape is placed next to it.
  * - `labelScale`: multiplier for every label's font size (1 = default).
  * - `wide`: whether the map gets the wide layout on the country page.
+ * - `labelsOnPhones`: whether labels are shown on phone-sized screens.
  */
 export interface RegionMap {
   viewBox: string;
@@ -30,6 +31,7 @@ export interface RegionMap {
   labelsBesideShapes: boolean;
   labelScale: number;
   wide: boolean;
+  labelsOnPhones: boolean;
 }
 
 /**
@@ -48,6 +50,9 @@ export interface RegionMap {
  * - `wide` (optional): for very wide maps (e.g. Russia, about 3:1), give the
  *   map most of the row next to the region panel instead of a third of it.
  *   Defaults to false.
+ * - `labelsOnPhones` (optional): set to false on dense maps (e.g. Russia)
+ *   whose labels are too small to read on a phone. The selected region's name
+ *   still shows in the region panel. Defaults to true.
  */
 export interface RegionMapConfig {
   viewBox: string;
@@ -56,4 +61,5 @@ export interface RegionMapConfig {
   labelsBesideShapes?: boolean;
   labelScale?: number;
   wide?: boolean;
+  labelsOnPhones?: boolean;
 }

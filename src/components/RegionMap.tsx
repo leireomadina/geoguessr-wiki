@@ -187,7 +187,7 @@ const RegionMap: React.FC<RegionMapProps> = ({
     <>
       <svg
         ref={svgRef}
-        className="region-map"
+        className={`region-map${countryMap.labelsOnPhones ? "" : " region-map--no-phone-labels"}`}
         viewBox={countryMap.viewBox}
         style={
           {

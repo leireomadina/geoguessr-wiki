@@ -56,4 +56,11 @@
   .region-label {
     font-size: calc(11px * var(--region-label-scale, 1));
   }
+
+  /* Dense maps (`labelsOnPhones: false`, e.g. Russia) are just colors on a
+     phone: their labels would be too small to read. Selecting a region still
+     shows its name in the region panel. */
+  .region-map--no-phone-labels .region-label {
+    display: none;
+  }
 }
