@@ -20,6 +20,7 @@ import ecuador from "./ecuador";
 import peru from "./peru";
 import uruguay from "./uruguay";
 import philippines from "./philippines";
+import russia from "./russia";
 import germany from "./germany";
 import portugal from "./portugal";
 import hungary from "./hungary";
@@ -59,6 +60,7 @@ export const countries: Country[] = [
   peru,
   uruguay,
   philippines,
+  russia,
   germany,
   portugal,
   hungary,

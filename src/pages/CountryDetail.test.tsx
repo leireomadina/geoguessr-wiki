@@ -94,15 +94,15 @@ describe("Country page", () => {
 
   describe("Regions toggle", () => {
     const country = findCountry("with regions", (c) => !!c.regions?.length);
-    const toggle = () => screen.getByRole("button", { name: "Regions" });
+    const toggle = () => screen.getByRole("button", { name: "Regions list" });
     const panel = () => document.getElementById(toggle().getAttribute("aria-controls")!)!;
 
-    it("is a button inside the Regions heading, controlling the regions panel", () => {
+    it("is a button inside the Regions list heading, controlling the regions panel", () => {
       renderRoute(`/country/${country.id}`);
 
-      expect(screen.getByRole("heading", { level: 2, name: "Regions" })).toContainElement(toggle());
+      expect(screen.getByRole("heading", { level: 3, name: "Regions list" })).toContainElement(toggle());
       expect(panel()).toContainElement(
-        screen.getByRole("heading", { level: 3, name: country.regions![0].name }),
+        screen.getByRole("heading", { level: 4, name: country.regions![0].name }),
       );
     });
 
@@ -140,7 +140,7 @@ describe("Country page", () => {
     renderRoute(`/country/${country.id}`);
 
     for (const region of country.regions!) {
-      expect(screen.getByRole("heading", { level: 3, name: region.name })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 4, name: region.name })).toBeInTheDocument();
     }
     expect(screen.queryByRole("group", { name: /Interactive region map/ })).not.toBeInTheDocument();
     // Cards are only selectable when there's a map to select on
@@ -188,6 +188,21 @@ describe("Country page", () => {
         "aria-pressed",
         "false",
       );
+    });
+
+    it("starts at the first region again after moving to another country", async () => {
+      // Two mapped countries, the second with more regions, so its last region's
+      // index is out of range for the first one.
+      const mapped = countries.filter((c) => hasRegionMap(c.id) && !!c.regions?.length);
+      const [fewer, more] = [...mapped].sort((a, b) => a.regions!.length - b.regions!.length);
+      const last = more.regions![more.regions!.length - 1];
+      const { user } = renderRoute(`/country/${fewer.id}`, `/country/${more.id}`);
+
+      await user.click(screen.getByRole("button", { name: `Select ${last.name}` }));
+      await user.click(screen.getByRole("button", { name: "←" }));
+
+      expect(screen.getByRole("heading", { level: 1, name: fewer.name })).toBeInTheDocument();
+      expect(screen.getByText(`Region 1 / ${fewer.regions!.length}`)).toBeInTheDocument();
     });
   });
 

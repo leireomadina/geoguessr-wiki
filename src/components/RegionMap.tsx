@@ -144,6 +144,12 @@ const RegionMap: React.FC<RegionMapProps> = ({
 
       shapeElement.style.fill = fillColors[regionIndex] ?? "";
 
+      // A label with a hand-picked position in the map config keeps it.
+      if (labelElement.hasAttribute("data-fixed")) continue;
+
+      // Show the label before measuring it: a label hidden on an earlier run
+      // would otherwise measure 0 wide.
+      labelElement.style.display = "";
       const labelBox = labelElement.getBBox();
       const centerX = regionBox.x + regionBox.width / 2;
       const centerY = regionBox.y + regionBox.height / 2;
@@ -154,6 +160,11 @@ const RegionMap: React.FC<RegionMapProps> = ({
       if (labelFits) {
         labelElement.setAttribute("x", String(centerX));
         labelElement.setAttribute("text-anchor", "middle");
+      } else if (!countryMap.labelsBesideShapes) {
+        // Dense maps (e.g. Russia) hide a label that doesn't fit instead of
+        // placing it beside the shape. The region stays selectable through
+        // its card.
+        labelElement.style.display = "none";
       } else if (
         regionBox.x + regionBox.width + LABEL_OFFSET_PX + labelBox.width <=
         viewBoxWidth
@@ -176,8 +187,13 @@ const RegionMap: React.FC<RegionMapProps> = ({
     <>
       <svg
         ref={svgRef}
-        className="region-map"
+        className={`region-map${countryMap.labelsOnPhones ? "" : " region-map--no-phone-labels"}`}
         viewBox={countryMap.viewBox}
+        style={
+          {
+            "--region-label-scale": countryMap.labelScale,
+          } as React.CSSProperties
+        }
         role="group"
         aria-label={`Interactive region map for ${regions.length} regions - use the region cards to select`}
       >
@@ -207,7 +223,20 @@ const RegionMap: React.FC<RegionMapProps> = ({
                 className={`region-shape${selected ? " selected" : ""}`}
                 d={shape.d}
               />
-              <text className="region-label">{shape.label}</text>
+              {shape.labelPosition ? (
+                <text
+                  className="region-label"
+                  data-fixed=""
+                  x={shape.labelPosition.x}
+                  y={shape.labelPosition.y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                >
+                  {shape.label}
+                </text>
+              ) : (
+                <text className="region-label">{shape.label}</text>
+              )}
             </g>
           );
         })}

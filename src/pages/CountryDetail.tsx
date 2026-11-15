@@ -6,7 +6,7 @@ import "@/styles/CountryDetail.css";
 import RegionCard from "@/components/RegionCard";
 import RegionMap from "@/components/RegionMap";
 import { DIFFICULTIES } from "@/data/enums";
-import { hasRegionMap } from "@/data/regionMaps";
+import { getRegionMap, hasRegionMap } from "@/data/regionMaps";
 import type { Difficulty } from "@/types/country";
 import NotFound from "./NotFound";
 
@@ -15,6 +15,15 @@ const CountryDetail: React.FC = () => {
   const navigate = useNavigate();
   const [isRegionToggleOpen, setRegionToggleOpen] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState(0);
+
+  // The page stays mounted when only the :id changes (e.g. going back in
+  // history), so start each country at its first region: an index left over
+  // from another country could point past the end of this one's regions.
+  const [selectionCountryId, setSelectionCountryId] = useState(id);
+  if (id !== selectionCountryId) {
+    setSelectionCountryId(id);
+    setSelectedRegion(0);
+  }
 
   const country = countries.find(
     (country) => country.id.toLowerCase() === id?.toLowerCase(),
@@ -97,99 +106,103 @@ const CountryDetail: React.FC = () => {
       )}
 
       {country && country.regions && (
-        <section className="resources-section">
-          <h2 className="section-title">
-            {/* A real button: reachable by keyboard and announces open/closed */}
-            <button
-              type="button"
-              className="regions-toggle"
-              aria-expanded={isRegionToggleOpen}
-              aria-controls="regions-panel"
-              onClick={() => setRegionToggleOpen((prev) => !prev)}
+        <section className="resources-section regions-section">
+          <h2 className="section-title">Regions</h2>
+          {hasMap && country.regions.length > 0 && (
+            <div
+              className={`regions-explore${getRegionMap(country.id)?.wide ? " regions-explore--wide" : ""}`}
             >
-              Regions
-              <span
-                className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}
-                aria-hidden="true"
-              >
-                ▼
-              </span>
-            </button>
-          </h2>
-          {/* Collapsing is a CSS animation, so the content stays in the DOM;
-              `inert` keeps keyboard focus and screen readers out of it while closed. */}
-          <div
-            id="regions-panel"
-            className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}
-            inert={!isRegionToggleOpen}
-          >
-            <div className="regions-grid">
-              {country.regions.length > 0 ? (
-                country.regions.map((region, i) => (
-                  <RegionCard
-                    key={i}
-                    region={region}
-                    selected={hasMap && i === selectedRegion}
-                    onSelect={hasMap ? () => setSelectedRegion(i) : undefined}
-                  />
-                ))
-              ) : (
-                <div className="region-card region-placeholder">
-                  <span className="region-icon">🚧</span>
-                  <div className="region-info">
-                    <h3 className="region-name">Coming soon</h3>
-                    <p className="region-description">
-                      Regions for this country are currently being prepared. Check back later!
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {hasMap && country.regions.length > 0 && (
-              <div className="regions-explore">
-                <div className="region-map-frame">
-                  <RegionMap
-                    countryId={country.id}
-                    regions={country.regions}
-                    selectedIndex={selectedRegion}
-                    onSelect={setSelectedRegion}
-                  />
-                </div>
-                <aside className="region-detail-panel">
-                  {country.regions[selectedRegion] && (
-                    <>
-                      <span className="region-detail-index">
-                        Region {selectedRegion + 1} / {country.regions.length}
-                      </span>
-                      <span className="region-detail-icon">
-                        {country.regions[selectedRegion].icon}
-                      </span>
-                      <h3 className="region-detail-name">
-                        {country.regions[selectedRegion].name}
-                      </h3>
-                      {country.regions[selectedRegion].cities && (
-                        <p className="region-detail-cities">
-                          {country.regions[selectedRegion].cities}
-                        </p>
-                      )}
-                      <p className="region-detail-description">
-                        {country.regions[selectedRegion].description}
-                      </p>
-                      <div className="region-card region-placeholder region-detail-coming-soon">
-                        <span className="region-icon">🚧</span>
-                        <div className="region-info">
-                          <h3 className="region-name">Coming soon</h3>
-                          <p className="region-description">
-                            More info about this region is being prepared. Check back later!
-                          </p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </aside>
+              <div className="region-map-frame">
+                <RegionMap
+                  countryId={country.id}
+                  regions={country.regions}
+                  selectedIndex={selectedRegion}
+                  onSelect={setSelectedRegion}
+                />
               </div>
-            )}
+              <aside className="region-detail-panel">
+                {country.regions[selectedRegion] && (
+                  <>
+                    <span className="region-detail-index">
+                      Region {selectedRegion + 1} / {country.regions.length}
+                    </span>
+                    <span className="region-detail-icon">
+                      {country.regions[selectedRegion].icon}
+                    </span>
+                    <h3 className="region-detail-name">
+                      {country.regions[selectedRegion].name}
+                    </h3>
+                    {country.regions[selectedRegion].cities && (
+                      <p className="region-detail-cities">
+                        {country.regions[selectedRegion].cities}
+                      </p>
+                    )}
+                    <p className="region-detail-description">
+                      {country.regions[selectedRegion].description}
+                    </p>
+                    <div className="region-card region-placeholder region-detail-coming-soon">
+                      <span className="region-icon">🚧</span>
+                      <div className="region-info">
+                        <h4 className="region-name">Coming soon</h4>
+                        <p className="region-description">
+                          More info about this region is being prepared. Check back later!
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </aside>
+            </div>
+          )}
+          <div className="regions-list">
+            <h3 className="section-title">
+              {/* A real button: reachable by keyboard and announces open/closed */}
+              <button
+                type="button"
+                className="regions-toggle"
+                aria-expanded={isRegionToggleOpen}
+                aria-controls="regions-panel"
+                onClick={() => setRegionToggleOpen((prev) => !prev)}
+              >
+                Regions list
+                <span
+                  className={`regions-arrow ${isRegionToggleOpen ? "open" : ""}`}
+                  aria-hidden="true"
+                >
+                  ▼
+                </span>
+              </button>
+            </h3>
+            {/* Collapsing is a CSS animation, so the content stays in the DOM;
+                `inert` keeps keyboard focus and screen readers out of it while closed. */}
+            <div
+              id="regions-panel"
+              className={`regions-grid-wrapper ${isRegionToggleOpen ? "open" : ""}`}
+              inert={!isRegionToggleOpen}
+            >
+              <div className="regions-grid">
+                {country.regions.length > 0 ? (
+                  country.regions.map((region, i) => (
+                    <RegionCard
+                      key={i}
+                      region={region}
+                      selected={hasMap && i === selectedRegion}
+                      onSelect={hasMap ? () => setSelectedRegion(i) : undefined}
+                    />
+                  ))
+                ) : (
+                  <div className="region-card region-placeholder">
+                    <span className="region-icon">🚧</span>
+                    <div className="region-info">
+                      <h4 className="region-name">Coming soon</h4>
+                      <p className="region-description">
+                        Regions for this country are currently being prepared. Check back later!
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </section>
       )}

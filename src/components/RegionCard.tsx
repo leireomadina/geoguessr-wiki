@@ -34,7 +34,7 @@ const RegionCard: React.FC<RegionCardProps> = ({
     >
       <span className="region-icon">{region.icon}</span>
       <div className="region-info">
-        <h3 className="region-name">{region.name}</h3>
+        <h4 className="region-name">{region.name}</h4>
         {region.cities && <p className="region-cities">{region.cities}</p>}
         <p className="region-description">{region.description}</p>
       </div>

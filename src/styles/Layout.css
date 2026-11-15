@@ -21,6 +21,9 @@
     color: var(--ink);
     text-transform: uppercase;
     letter-spacing: -0.05em;
+    /* Unitless, so the two lines of "GeoGuessr Wiki" don't overlap: the root's
+       145% line-height is inherited as a fixed ~26px, less than this font size. */
+    line-height: 1;
     transform: rotate(-2deg);
     display: inline-block;
     background: var(--accent-yellow);
@@ -122,4 +125,39 @@
 
 .theme-toggle:hover {
     color: var(--accent-deep);
+}
+
+/* Phones: the desktop padding (4rem a side) and full-size logo don't fit, which
+   pushed the header and page wider than the screen. */
+@media (max-width: 600px) {
+    .header {
+        padding: 1.25rem 0;
+    }
+
+    .nav-container {
+        padding: 0 1.25rem;
+        gap: 1rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .nav-links {
+        gap: 0.25rem;
+        align-items: center;
+    }
+
+    .nav-link {
+        padding: 0.5rem;
+    }
+
+    .content {
+        padding: 0 1.25rem 3rem;
+    }
+
+    .footer {
+        padding: 1rem 1.25rem;
+    }
 }
